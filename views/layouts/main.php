@@ -111,10 +111,6 @@ $moduleName = $this->context->module->id;
                 <i class="glyphicon glyphicon-hdd"></i>
                 <span><?= Yii::t('easyii', 'System') ?></span>
             </a></li>
-            <li class="<?= ($moduleName == 'migration') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/migration']) ?>" class="menu-item">
-                <i class="fa fa-database"></i>
-                <span><?= Yii::t('easyii', 'Migration') ?></span>
-            </a></li>
             <li class="<?= ($moduleName == 'admin' && $this->context->id == 'logs') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/logs']) ?>" class="menu-item">
                 <i class="glyphicon glyphicon-align-justify"></i>
                 <span><?= Yii::t('easyii', 'Logs') ?></span>
