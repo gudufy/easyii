@@ -14,6 +14,15 @@ class Controller extends \yii\web\Controller
     public $enableCsrfValidation = false;
     public $rootActions = [];
     public $error = null;
+
+    public function actions()
+    {
+        return [
+            'Kupload' => [
+                'class' => 'yii\easyii\behaviors\KindEditorAction',
+            ]
+        ];
+    }
     
     public function init()
     {

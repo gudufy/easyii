@@ -3,16 +3,53 @@ namespace yii\easyii\widgets;
 
 use Yii;
 use yii\easyii\helpers\Data;
+use yii\helpers\ArrayHelper;
 use yii\widgets\InputWidget;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\helpers\Json;
 use yii\web\JsExpression;
 use yii\web\AssetBundle;
 
 use yii\easyii\assets\RedactorAsset;
 
-class Redactor extends InputWidget
+class Redactor extends \pjkui\kindeditor\KindEditor
 {
+    public $dir;
+
+    public function init(){
+        parent::init();
+
+        $this->dir = empty($this->dir) ? 'image' : $this->dir;
+        $this->_options = [
+            'fileManagerJson' => Url::to(['Kupload', 'action' => 'fileManagerJson']),
+            'uploadJson' => Url::to(['Kupload', 'action' => 'uploadJson']),
+            'width' => '100%',
+            'height' => '400',
+            //定制菜单
+            'items' => [
+                'source', '|', 'undo', 'redo', '|', 'preview', 'cut', 'copy', 'paste',
+                'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+                'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+                'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+                'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+                'flash', 'insertfile', 'table', 'hr', 'emoticons', 'pagebreak',
+                'anchor', 'link', 'unlink', '|', 'about'
+            ],
+            'allowFileManager'=>'true',
+            'allowUpload'=>'true',
+                //'langType' => (strtolower(Yii::$app->language) == 'en-us') ? 'en' : 'zh_cn',//kindeditor支持一下语言：en,zh_CN,zh_TW,ko,ar
+        ];
+
+        $this->clientOptions = ArrayHelper::merge($this->_options, $this->clientOptions);
+        
+        if($this->hasModel()){
+            parent::init();
+        }
+    }
+
+    /*
     public $options = [];
 
     private $_defaultOptions = [
@@ -87,6 +124,6 @@ class Redactor extends InputWidget
             $this->registerAssetBundle();
         }
         return $this->_assetBundle;
-    }
+    }*/
 
 }
