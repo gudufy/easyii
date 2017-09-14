@@ -6,6 +6,7 @@ use yii\easyii\modules\catalog;
 use yii\easyii\modules\shopcart;
 use yii\easyii\modules\article;
 use yii\easyii\modules\carousel\models\Carousel;
+use yii\easyii\modules\client\models\Client;
 use yii\easyii\modules\faq\models\Faq;
 use yii\easyii\modules\feedback\models\Feedback;
 use yii\easyii\modules\file\models\File;
@@ -96,6 +97,17 @@ class m000000_000000_install extends \yii\db\Migration
         //CAROUSEL MODULE
         $this->createTable(Carousel::tableName(), [
             'carousel_id' => 'pk',
+            'image' => Schema::TYPE_STRING . '(128) NOT NULL',
+            'link' => Schema::TYPE_STRING . '(255) NOT NULL',
+            'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'text' => Schema::TYPE_TEXT . ' DEFAULT NULL',
+            'order_num' => Schema::TYPE_INTEGER,
+            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
+        ], $this->engine);
+
+        //CLIENT MODULE
+        $this->createTable(Client::tableName(), [
+            'client_id' => 'pk',
             'image' => Schema::TYPE_STRING . '(128) NOT NULL',
             'link' => Schema::TYPE_STRING . '(255) NOT NULL',
             'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
@@ -349,6 +361,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->dropTable(models\Setting::tableName());
 
         $this->dropTable(Carousel::tableName());
+        $this->dropTable(Client::tableName());
         $this->dropTable(catalog\models\Category::tableName());
         $this->dropTable(catalog\models\Item::tableName());
         $this->dropTable(article\models\Category::tableName());
