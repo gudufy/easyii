@@ -14,7 +14,9 @@ $module = $this->context->module->id;
     'enableAjaxValidation' => true,
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
-<?= $form->field($model, 'title') ?>
+<div class="row">
+    <div class="col-md-8">
+<?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 <?php if($this->context->module->settings['enableThumb']) : ?>
     <?php if($model->image) : ?>
         <img src="<?= Image::thumb($model->image, 240) ?>">
@@ -34,16 +36,19 @@ $module = $this->context->module->id;
     ]
 ]) ?>
 
-<?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
+    </div>
+    <div class="col-md-4">
+        <?= $form->field($model, 'slug') ?>
+        <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 
-<?php if($this->context->module->settings['enableTags']) : ?>
-    <?= $form->field($model, 'tagNames')->widget(TagsInput::className()) ?>
-<?php endif; ?>
+        <?php if($this->context->module->settings['enableTags']) : ?>
+            <?= $form->field($model, 'tagNames')->widget(TagsInput::className()) ?>
+        <?php endif; ?>
+        <?= SeoForm::widget(['model' => $model]) ?>
+        <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
+    </div>
+</div>
 
-<?php if(IS_ROOT) : ?>
-    <?= $form->field($model, 'slug') ?>
-    <?= SeoForm::widget(['model' => $model]) ?>
-<?php endif; ?>
 
-<?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
+
 <?php ActiveForm::end(); ?>

@@ -38,10 +38,8 @@ $settings = $this->context->module->settings;
     <?= $form->field($model, 'image')->fileInput() ?>
 <?php endif; ?>
 
-<?php if(IS_ROOT) : ?>
-    <?= $form->field($model, 'slug') ?>
-    <?= SeoForm::widget(['model' => $model]) ?>
-<?php endif; ?>
+<?= $form->field($model, 'slug') ?>
+<?= SeoForm::widget(['model' => $model]) ?>
 
 <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end(); ?>

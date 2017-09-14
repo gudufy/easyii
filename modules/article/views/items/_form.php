@@ -14,7 +14,9 @@ $module = $this->context->module->id;
     'enableAjaxValidation' => true,
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
-<?= $form->field($model, 'title') ?>
+<div class="row">
+    <div class="col-md-8">
+<?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
 <?php if($this->context->module->settings['articleThumb']) : ?>
     <?php if($model->image) : ?>
@@ -36,6 +38,9 @@ $module = $this->context->module->id;
         'plugins' => ['fullscreen']
     ]
 ]) ?>
+    </div>
+    <div class="col-md-4">
+<?= $form->field($model, 'slug') ?>
 
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 
@@ -43,10 +48,12 @@ $module = $this->context->module->id;
     <?= $form->field($model, 'tagNames')->widget(TagsInput::className()) ?>
 <?php endif; ?>
 
-<?php if(IS_ROOT) : ?>
-    <?= $form->field($model, 'slug') ?>
-    <?= SeoForm::widget(['model' => $model]) ?>
-<?php endif; ?>
+<?= SeoForm::widget(['model' => $model]) ?>
 
 <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
+    </div>
+</div>
+
+
+
 <?php ActiveForm::end(); ?>

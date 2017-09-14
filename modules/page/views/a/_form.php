@@ -21,8 +21,9 @@ use yii\easyii\widgets\SeoForm;
 
 <?php if(IS_ROOT) : ?>
     <?= $form->field($model, 'slug') ?>
-    <?= SeoForm::widget(['model' => $model]) ?>
+    
 <?php endif; ?>
+<?= SeoForm::widget(['model' => $model]) ?>
 
 <?= Html::submitButton(Yii::t('easyii','Save'), ['class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end(); ?>

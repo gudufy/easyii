@@ -49,6 +49,7 @@ $moduleName = $this->context->module->id;
                 </a>
                 <ul class="dropdown-menu">
                     <li class="user-footer">
+                        <?php if(!IS_ROOT) : ?>
                         <div class="pull-left" style="width:45%;">
                             <?= Html::a(
                                 Yii::t('easyii','Edit password'),
@@ -56,7 +57,8 @@ $moduleName = $this->context->module->id;
                                 ['class' => 'btn btn-default btn-flat btn-block']
                             ) ?>
                         </div>
-                        <div class="pull-right" style="width:45%;">
+                        <?php endif; ?>
+                        <div class="pull-right" style="<?=IS_ROOT ? 'width:90%;' : 'width:45%;' ?>">
                             <?= Html::a(
                                 Yii::t('easyii','Logout'),
                                 ['/admin/sign/out'],

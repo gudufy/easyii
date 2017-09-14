@@ -14,7 +14,11 @@ $module = $this->context->module->id;
 <?php $form = ActiveForm::begin([
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
+<div class="row">
+    <div class="col-md-8">
+
 <?= $form->field($model, 'title') ?>
+
 <?php if($settings['itemThumb']) : ?>
     <?php if($model->image) : ?>
         <img src="<?= Image::thumb($model->image, 240) ?>">
@@ -23,7 +27,6 @@ $module = $this->context->module->id;
     <?= $form->field($model, 'image')->fileInput() ?>
 <?php endif; ?>
 <?= $dataForm ?>
-<?php if($settings['itemDescription']) : ?>
     <?= $form->field($model, 'description')->widget(Redactor::className(),[
         'options' => [
             'minHeight' => 400,
@@ -32,18 +35,23 @@ $module = $this->context->module->id;
             'plugins' => ['fullscreen']
         ]
     ]) ?>
+
+    </div>
+    <div class="col-md-4">
+<?= $form->field($model, 'slug') ?>
+<?php if($settings['itemSale']) : ?>
+<?= $form->field($model, 'available')->textInput(['maxlength' => true]) ?>
+<?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
+<?= $form->field($model, 'discount')->textInput(['maxlength' => true]) ?>
 <?php endif; ?>
-
-<?= $form->field($model, 'available') ?>
-<?= $form->field($model, 'price') ?>
-<?= $form->field($model, 'discount') ?>
-
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 
-<?php if(IS_ROOT) : ?>
-    <?= $form->field($model, 'slug') ?>
-    <?= SeoForm::widget(['model' => $model]) ?>
-<?php endif; ?>
+<?= SeoForm::widget(['model' => $model]) ?>
 
 <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
+    </div>
+</div>
+
+
+
 <?php ActiveForm::end(); ?>
