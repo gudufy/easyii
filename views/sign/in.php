@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\easyii\models\Setting;
 
 $asset = \yii\easyii\assets\EmptyAsset::register($this);
 $this->title = Yii::t('easyii', 'Sign in');
@@ -26,8 +27,8 @@ $this->title = Yii::t('easyii', 'Sign in');
                 </div>
             </div>
             <div class="text-center">
-                <a class="logo" href="http://easyiicms.com" target="_blank" title="EasyiiCMS homepage">
-                    <img src="<?= $asset->baseUrl ?>/img/logo_20.png">EasyiiCMS
+                <a class="logo" href="/" title="<?=Setting::get('site_name') ?> homepage">
+                    <img src="<?= $asset->baseUrl ?>/img/logo_20.png"><?=Setting::get('site_name') ?>
                 </a>
             </div>
         </div>

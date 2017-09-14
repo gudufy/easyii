@@ -7,8 +7,6 @@ use yii\easyii\models\LoginForm;
 
 class LogsController extends \yii\easyii\components\Controller
 {
-    public $rootActions = 'all';
-
     public function actionIndex()
     {
         $data = new ActiveDataProvider([

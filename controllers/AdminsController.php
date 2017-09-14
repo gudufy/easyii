@@ -8,8 +8,6 @@ use yii\easyii\models\Admin;
 
 class AdminsController extends \yii\easyii\components\Controller
 {
-    public $rootActions = ['index','create','edit','delete'];
-
     public function actionIndex()
     {
         $data = new ActiveDataProvider([

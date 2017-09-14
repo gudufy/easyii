@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use yii\easyii\assets\AdminAsset;
 use yii\easyii\helpers\Data;
+use yii\easyii\models\Setting;
 
 $asset = AdminAsset::register($this);
 $moduleName = $this->context->module->id;
@@ -13,7 +14,7 @@ $moduleName = $this->context->module->id;
 <head>
     <meta charset="<?= Yii::$app->charset ?>"/>
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?= Html::encode($this->title) ?> - <?=Setting::get('site_name') ?></title>
     <link rel="shortcut icon" href="<?= $asset->baseUrl ?>/favicon.ico" type="image/x-icon">
     <link rel="icon" href="<?= $asset->baseUrl ?>/favicon.ico" type="image/x-icon">
     <?php $this->head() ?>
@@ -27,7 +28,7 @@ $moduleName = $this->context->module->id;
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini">CMS</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg">EsyiiCMS</span>
+        <span class="logo-lg"><?=Setting::get('site_name') ?></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -100,23 +101,25 @@ $moduleName = $this->context->module->id;
             <i class="glyphicon glyphicon-cog"></i>
             <span><?= Yii::t('easyii', 'Settings') ?></span>
         </a></li>
-        <?php if(IS_ROOT) : ?>
-            <li class="<?= ($moduleName == 'admin' && $this->context->id == 'modules') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/modules']) ?>" class="menu-item">
-                <i class="glyphicon glyphicon-folder-close"></i>
-                <span><?= Yii::t('easyii', 'Modules') ?></span>
-            </a></li>
-            <li class="<?= ($moduleName == 'admin' && $this->context->id == 'admins') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/admins']) ?>" class="menu-item">
+        <li class="<?= ($moduleName == 'admin' && $this->context->id == 'admins') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/admins']) ?>" class="menu-item">
                 <i class="glyphicon glyphicon-user"></i>
                 <span><?= Yii::t('easyii', 'Admins') ?></span>
-            </a></li>
-            <li class="<?= ($moduleName == 'admin' && $this->context->id == 'system') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/system']) ?>" class="menu-item">
-                <i class="glyphicon glyphicon-hdd"></i>
-                <span><?= Yii::t('easyii', 'System') ?></span>
             </a></li>
             <li class="<?= ($moduleName == 'admin' && $this->context->id == 'logs') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/logs']) ?>" class="menu-item">
                 <i class="glyphicon glyphicon-align-justify"></i>
                 <span><?= Yii::t('easyii', 'Logs') ?></span>
             </a></li>
+        <?php if(IS_ROOT) : ?>
+            <li class="<?= ($moduleName == 'admin' && $this->context->id == 'modules') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/modules']) ?>" class="menu-item">
+                <i class="glyphicon glyphicon-folder-close"></i>
+                <span><?= Yii::t('easyii', 'Modules') ?></span>
+            </a></li>
+            
+            <li class="<?= ($moduleName == 'admin' && $this->context->id == 'system') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/system']) ?>" class="menu-item">
+                <i class="glyphicon glyphicon-hdd"></i>
+                <span><?= Yii::t('easyii', 'System') ?></span>
+            </a></li>
+            
         <?php endif; ?>
       </ul>
     </section>

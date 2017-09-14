@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\easyii\models\Setting;
 
 $asset = \yii\easyii\assets\EmptyAsset::register($this);
 ?>
@@ -8,7 +9,7 @@ $asset = \yii\easyii\assets\EmptyAsset::register($this);
     <head>
         <meta charset="<?= Yii::$app->charset ?>"/>
         <?= Html::csrfMetaTags() ?>
-        <title><?= Yii::t('easyii', 'Control Panel') ?> - <?= Html::encode($this->title) ?></title>
+        <title><?= Yii::t('easyii', 'Control Panel') ?> - <?= Html::encode($this->title) ?> - <?=Setting::get('site_name') ?></title>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="<?= $asset->baseUrl ?>/favicon.ico" type="image/x-icon">
         <link rel="icon" href="<?= $asset->baseUrl ?>/favicon.ico" type="image/x-icon">
