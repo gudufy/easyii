@@ -17,6 +17,7 @@ return [
          ],
         'user' => [
             'identityClass' => 'yii\easyii\models\User',
+            'loginUrl' => ['user/login'],
             'enableAutoLogin' => true,
             'authTimeout' => 86400,
         ],
@@ -43,7 +44,6 @@ return [
     'as access' => [
         'class' => 'yii\easyii\modules\rbac\components\AccessControl',
         'allowActions' => [
-            'admin/default/index',
             'admin/sign/in',
         ]
     ],
