@@ -101,9 +101,26 @@ $moduleName = $this->context->module->id;
             <i class="glyphicon glyphicon-cog"></i>
             <span><?= Yii::t('easyii', 'Settings') ?></span>
         </a></li>
-        <li class="<?= ($moduleName == 'admin' && $this->context->id == 'admins') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/admins']) ?>" class="menu-item">
+        <?php if(IS_ROOT) : ?>
+        <li class="treeview<?= ($moduleName == 'rbac') ? ' active' :'' ?>">
+          <a href="#">
+            <i class="fa fa-pie-chart"></i>
+            <span>权限</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="<?= ($moduleName == 'rbac' && $this->context->id == 'route') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/rbac/route']) ?>"><i class="fa fa-circle-o"></i> 路由</a></li>                                    
+            <li class="<?= ($moduleName == 'rbac' && $this->context->id == 'permission') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/rbac/permission']) ?>"><i class="fa fa-circle-o"></i> 权限</a></li>                                    
+            <li class="<?= ($moduleName == 'rbac' && $this->context->id == 'role') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/rbac/role']) ?>"><i class="fa fa-circle-o"></i> 角色</a></li>                                    
+            <li class="<?= ($moduleName == 'rbac' && $this->context->id == 'assignment') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/rbac/assignment']) ?>"><i class="fa fa-circle-o"></i> 分配</a></li>                                    
+          </ul>
+        </li>  
+        <?php endif; ?>
+        <li class="<?= ($moduleName == 'admin' && $this->context->id == 'users') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/users']) ?>" class="menu-item">
                 <i class="glyphicon glyphicon-user"></i>
-                <span><?= Yii::t('easyii', 'Admins') ?></span>
+                <span><?= Yii::t('easyii', 'Users') ?></span>
             </a></li>
             <li class="<?= ($moduleName == 'admin' && $this->context->id == 'logs') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/logs']) ?>" class="menu-item">
                 <i class="glyphicon glyphicon-align-justify"></i>

@@ -16,9 +16,13 @@ return [
             ],
          ],
         'user' => [
-            'identityClass' => 'yii\easyii\models\Admin',
+            'identityClass' => 'yii\easyii\models\User',
             'enableAutoLogin' => true,
             'authTimeout' => 86400,
+        ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager', // or use 'yii\rbac\DbManager'
+            "defaultRoles" => ["guest"],
         ],
         'i18n' => [
             'translations' => [
@@ -35,6 +39,13 @@ return [
         'formatter' => [
             'sizeFormatBase' => 1000
         ],
+    ],
+    'as access' => [
+        'class' => 'yii\easyii\modules\rbac\components\AccessControl',
+        'allowActions' => [
+            'admin/default/index',
+            'admin/sign/in',
+        ]
     ],
     'bootstrap' => ['admin']
 ];

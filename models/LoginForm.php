@@ -41,7 +41,10 @@ class LoginForm extends ActiveRecord
         if (!$this->hasErrors()) {
             $user = $this->getUser();
 
-            if (!$user || !$user->validatePassword($this->password)) {
+            if ($user && $user->username != 'root' && $user->status == User::STATUS_OFF){
+                $this->addError($attribute, Yii::t('easyii', 'User locked, unable to login.'));
+            }
+            else if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, Yii::t('easyii', 'Incorrect username or password.'));
             }
         }
@@ -52,7 +55,7 @@ class LoginForm extends ActiveRecord
         $cache = Yii::$app->cache;
 
         if(($tries = (int)$cache->get(self::CACHE_KEY)) > 5){
-            $this->addError('username', Yii::t('easyii', 'You tried to login too often. Please wait 5 minutes.'));
+            $this->addError('username', Yii::t('easyii', 'You tried to login too often. Please wait 2 minutes.'));
             return false;
         }
 
@@ -65,7 +68,7 @@ class LoginForm extends ActiveRecord
             $this->success = 1;
         } else {
             $this->success = 0;
-            $cache->set(self::CACHE_KEY, ++$tries, 300);
+            $cache->set(self::CACHE_KEY, ++$tries, 120);
         }
         $this->insert(false);
 
@@ -76,7 +79,7 @@ class LoginForm extends ActiveRecord
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = Admin::findByUsername($this->username);
+            $this->_user = User::findByUsername($this->username);
         }
 
         return $this->_user;
