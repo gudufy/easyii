@@ -145,4 +145,17 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
     {
         return $this->username === self::$rootUser['username'];
     }
+
+    /**
+    * Finds all users by assignment role
+    *
+    * @param  \yii\rbac\Role $role
+    * @return static|null
+    */
+    public static function findByRole($role_name)
+    {
+        return static::find()
+            ->join('LEFT JOIN','auth_assignment','auth_assignment.user_id = easyii_users.user_id')
+            ->where(['auth_assignment.item_name' => $role_name]);
+    }
 }

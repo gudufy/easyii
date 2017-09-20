@@ -114,6 +114,10 @@ $moduleName = $this->context->module->id;
             <i class="glyphicon glyphicon-cog"></i>
             <span><?= Yii::t('easyii', 'Settings') ?></span>
         </a></li>
+        <li class="<?= ($moduleName == 'admin' && $this->context->id == 'admins') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/admins']) ?>" class="menu-item">
+                <i class="glyphicon glyphicon-user"></i>
+                <span><?= Yii::t('easyii', 'Admins') ?></span>
+            </a></li>
         <?php if(IS_ROOT) : ?>
         <li class="treeview<?= ($moduleName == 'rbac') ? ' active' :'' ?>">
           <a href="#">

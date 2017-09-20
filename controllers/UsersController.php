@@ -25,7 +25,7 @@ class UsersController extends \yii\easyii\components\Controller
     public function actionIndex()
     {
         $data = new ActiveDataProvider([
-            'query' => User::find()->desc(),
+            'query' => User::findByRole('user')->desc(),
         ]);
         Yii::$app->user->setReturnUrl(['/admin/users']);
 
@@ -57,7 +57,7 @@ class UsersController extends \yii\easyii\components\Controller
                 
                 if($model->save()){
                     $role = new Assignment($model->id);
-                    $success = $role->assign(['administrator']);
+                    $success = $role->assign(['user']);
 
                     $this->flash('success', Yii::t('easyii', 'User created'));
                     return $this->redirect(['/admin/users']);
@@ -125,37 +125,6 @@ class UsersController extends \yii\easyii\components\Controller
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii', 'User deleted'));
-    }
-
-    public function actionChangePwd($id)
-    {
-        $model = User::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin']);
-        }
-
-        if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ActiveForm::validate($model);
-            }
-            else{
-                if($model->save()){
-                    $this->flash('success', Yii::t('easyii', 'Password updated'));
-                }
-                else{
-                    $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-                }
-                return $this->refresh();
-            }
-        }
-        else {
-            return $this->render('change_pwd', [
-                'model' => $model
-            ]);
-        }
     }
 
     public function actionOn($id)

@@ -4,14 +4,14 @@ namespace yii\easyii\controllers;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\widgets\ActiveForm;
-use yii\easyii\models\Admin;
+use yii\easyii\models\User;
 
 class AdminsController extends \yii\easyii\components\Controller
 {
     public function actionIndex()
     {
         $data = new ActiveDataProvider([
-            'query' => Admin::find()->desc(),
+            'query' => User::findByRole('administrator')->desc(),
         ]);
         Yii::$app->user->setReturnUrl(['/admin/admins']);
 
@@ -22,7 +22,7 @@ class AdminsController extends \yii\easyii\components\Controller
 
     public function actionCreate()
     {
-        $model = new Admin;
+        $model = new User;
         $model->scenario = 'create';
 
         if ($model->load(Yii::$app->request->post())) {
@@ -31,7 +31,20 @@ class AdminsController extends \yii\easyii\components\Controller
                 return ActiveForm::validate($model);
             }
             else{
+                if(($fileInstanse = UploadedFile::getInstance($model, 'image')))
+                {
+                    $model->image = $fileInstanse;
+                    if($model->validate(['image'])){
+                        $model->image = Image::upload($model->image, 'admins');
+                    }
+                }
+
+                $model->status = User::STATUS_ON;
+
                 if($model->save()){
+                    $role = new Assignment($model->id);
+                    $success = $role->assign(['administrator']);
+
                     $this->flash('success', Yii::t('easyii', 'Admin created'));
                     return $this->redirect(['/admin/admins']);
                 }
@@ -50,7 +63,7 @@ class AdminsController extends \yii\easyii\components\Controller
 
     public function actionEdit($id)
     {
-        $model = Admin::findOne($id);
+        $model = User::findOne($id);
 
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
@@ -63,6 +76,17 @@ class AdminsController extends \yii\easyii\components\Controller
                 return ActiveForm::validate($model);
             }
             else{
+                if(($fileInstanse = UploadedFile::getInstance($model, 'image')))
+                {
+                    $model->image = $fileInstanse;
+                    if($model->validate(['image'])){
+                        $model->image = Image::upload($model->image, 'users');
+                    }
+                }
+                else{
+                    $model->image = $model->oldAttributes['image'];
+                }
+                
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii', 'Admin updated'));
                 }
@@ -81,7 +105,7 @@ class AdminsController extends \yii\easyii\components\Controller
 
     public function actionDelete($id)
     {
-        if(($model = Admin::findOne($id))){
+        if(($model = User::findOne($id))){
             $model->delete();
         } else {
             $this->error = Yii::t('easyii', 'Not found');
@@ -91,7 +115,7 @@ class AdminsController extends \yii\easyii\components\Controller
 
     public function actionChangePwd($id)
     {
-        $model = Admin::findOne($id);
+        $model = User::findOne($id);
 
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
@@ -118,5 +142,15 @@ class AdminsController extends \yii\easyii\components\Controller
                 'model' => $model
             ]);
         }
+    }
+
+    public function actionOn($id)
+    {
+        return $this->changeStatus($id, User::STATUS_ON);
+    }
+
+    public function actionOff($id)
+    {
+        return $this->changeStatus($id, User::STATUS_OFF);
     }
 }
