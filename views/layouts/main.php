@@ -85,17 +85,30 @@ $moduleName = $this->context->module->id;
             <i class="fa fa-dashboard"></i> <span><?=Yii::t('easyii','Dashboard') ?></span>
           </a>
         </li>
-        <?php foreach(Yii::$app->getModule('admin')->activeModules as $module) : ?>
-            <li class="<?= ($moduleName == $module->name ? 'active' : '') ?>"><a href="<?= Url::to(["/admin/$module->name"]) ?>" class="menu-item">
-                <?php if($module->icon != '') : ?>
-                    <i class="glyphicon glyphicon-<?= $module->icon ?>"></i>
-                <?php endif; ?>
-                <span><?=$module->title?></span>
-                <?php if($module->notice > 0) : ?>
-                    <span class="badge"><?= $module->notice ?></span>
-                <?php endif; ?>
+        <li class="treeview<?= ($moduleName != 'rbac' && $moduleName != 'admin') ? ' active' :'' ?>">
+          <a href="#">
+            <i class="fa fa-edit"></i>
+            <span><?= Yii::t('easyii', 'Content Manage') ?></span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <?php foreach(Yii::$app->getModule('admin')->activeModules as $module) : ?>
+                <li class="<?= ($moduleName == $module->name ? 'active' : '') ?>">
+                <a href="<?= Url::to(["/admin/$module->name"]) ?>" class="menu-item">
+                    <i class="fa fa-circle-o"></i>  <?=$module->title?>
+                    <?php if($module->notice > 0) : ?>
+                        <span class="badge"><?= $module->notice ?></span>
+                    <?php endif; ?>
+                </a></li>
+            <?php endforeach; ?>
+          </ul>
+        </li>  
+        <li class="<?= ($moduleName == 'admin' && $this->context->id == 'users') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/users']) ?>" class="menu-item">
+                <i class="glyphicon glyphicon-user"></i>
+                <span><?= Yii::t('easyii', 'Users') ?></span>
             </a></li>
-        <?php endforeach; ?>
         <li class="header">System</li>
         <li class="<?= ($moduleName == 'admin' && $this->context->id == 'settings') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/settings']) ?>" class="menu-item">
             <i class="glyphicon glyphicon-cog"></i>
@@ -118,10 +131,7 @@ $moduleName = $this->context->module->id;
           </ul>
         </li>  
         <?php endif; ?>
-        <li class="<?= ($moduleName == 'admin' && $this->context->id == 'users') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/users']) ?>" class="menu-item">
-                <i class="glyphicon glyphicon-user"></i>
-                <span><?= Yii::t('easyii', 'Users') ?></span>
-            </a></li>
+        
             <li class="<?= ($moduleName == 'admin' && $this->context->id == 'logs') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/logs']) ?>" class="menu-item">
                 <i class="glyphicon glyphicon-align-justify"></i>
                 <span><?= Yii::t('easyii', 'Logs') ?></span>

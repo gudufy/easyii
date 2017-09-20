@@ -170,7 +170,7 @@ class Route extends \yii\base\Object
         $token = "Get controllers from '$path'";
         Yii::beginProfile($token, __METHOD__);
         try {
-            if (!is_dir($path)) {
+            if (!is_dir($path) ) {
                 return;
             }
             foreach (scandir($path) as $file) {

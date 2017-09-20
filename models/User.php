@@ -39,7 +39,7 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
         return [
             'image' => Yii::t('easyii', 'Image'),
             'username' => Yii::t('easyii', 'Username'),
-            'password' => Yii::t('easyii', 'Password'),
+            'password_hash' => Yii::t('easyii', 'Password'),
             'name' => Yii::t('easyii', 'Full Name'),
             'mobile' => Yii::t('easyii', 'Mobile'),
             'sex' => Yii::t('easyii', 'Gender'),
@@ -56,9 +56,9 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
                 }
 
                 $this->auth_key = $this->generateAuthKey();
-                $this->password = $this->hashPassword($this->password);
+                $this->password_hash = $this->hashPassword($this->password_hash);
             } else {
-                $this->password = $this->password != '' ? $this->hashPassword($this->password) : $this->oldAttributes['password'];
+                $this->password_hash = $this->password_hash != '' ? $this->hashPassword($this->password_hash) : $this->oldAttributes['password_hash'];
             }
             return true;
         } else {

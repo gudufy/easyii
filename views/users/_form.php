@@ -11,7 +11,7 @@
 <?php endif; ?>
 <?= $form->field($model, 'image')->fileInput() ?>
 <?= $form->field($model, 'username')->textInput($this->context->action->id === 'edit' ? ['disabled' => 'disabled'] : []) ?>
-<?= $form->field($model, 'password')->passwordInput(['value' => '']) ?>
+<?= $form->field($model, 'password_hash')->passwordInput(['value' => '']) ?>
 <?= $form->field($model, 'name')->textInput() ?>
 <?= $form->field($model, 'mobile')->textInput() ?>
 <?= $form->field($model, 'sex')->radioList($model->getSexs()) ?>

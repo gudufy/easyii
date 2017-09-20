@@ -7,6 +7,7 @@ use yii\easyii\helpers\Image;
 use yii\data\ActiveDataProvider;
 use yii\widgets\ActiveForm;
 use yii\easyii\models\User;
+use yii\easyii\modules\rbac\models\Assignment;
 use yii\easyii\behaviors\StatusController;
 
 class UsersController extends \yii\easyii\components\Controller
@@ -50,17 +51,20 @@ class UsersController extends \yii\easyii\components\Controller
                     if($model->validate(['image'])){
                         $model->image = Image::upload($model->image, 'users');
                     }
+                }
 
-                    $model->status = User::STATUS_ON;
+                $model->status = User::STATUS_ON;
+                
+                if($model->save()){
+                    $role = new Assignment($model->id);
+                    $success = $role->assign(['administrator']);
 
-                    if($model->save()){
-                        $this->flash('success', Yii::t('easyii', 'User created'));
-                        return $this->redirect(['/admin/users']);
-                    }
-                    else{
-                        $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
-                        return $this->refresh();
-                    }
+                    $this->flash('success', Yii::t('easyii', 'User created'));
+                    return $this->redirect(['/admin/users']);
+                }
+                else{
+                    $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
+                    return $this->refresh();
                 }
             }
         }

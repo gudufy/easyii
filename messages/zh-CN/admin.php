@@ -133,5 +133,5 @@ return [
     'Clear image' => '删除图片',
     'Image cleared' => '图片已删除成功',
 
-
+    'Content Manage' => '内容管理'
 ];

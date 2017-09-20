@@ -16,7 +16,7 @@ class AdminsController extends \yii\easyii\components\Controller
         Yii::$app->user->setReturnUrl(['/admin/admins']);
 
         return $this->render('index', [
-            'data' => $data
+            'data' => $data,
         ]);
     }
 

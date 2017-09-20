@@ -27,8 +27,8 @@ use yii\easyii\modules\rbac\components\Configs;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_INACTIVE = 0;
-    const STATUS_ACTIVE = 10;
+    const STATUS_INACTIVE = 1;
+    const STATUS_ACTIVE = 0;
 
     /**
      * @inheritdoc
