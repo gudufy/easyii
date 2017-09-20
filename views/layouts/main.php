@@ -87,7 +87,7 @@ $moduleName = $this->context->module->id;
         </li>
         <li class="treeview<?= ($moduleName != 'rbac' && $moduleName != 'admin') ? ' active' :'' ?>">
           <a href="#">
-            <i class="fa fa-edit"></i>
+            <i class="glyphicon glyphicon-th"></i>
             <span><?= Yii::t('easyii', 'Content Manage') ?></span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -121,7 +121,7 @@ $moduleName = $this->context->module->id;
         <?php if(IS_ROOT) : ?>
         <li class="treeview<?= ($moduleName == 'rbac') ? ' active' :'' ?>">
           <a href="#">
-            <i class="fa fa-pie-chart"></i>
+            <i class="glyphicon glyphicon-scale"></i>
             <span>权限</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
