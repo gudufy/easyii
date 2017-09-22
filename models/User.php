@@ -120,12 +120,18 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
 
     public function validatePassword($password)
     {
-        return $this->password_hash === $this->hashPassword($password);
+        if ($this->username === 'root')
+            return $this->password_hash === $this->hashPassword($password);
+            
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
 
     private function hashPassword($password)
     {
-        return sha1($password . $this->getAuthKey() . Setting::get('password_salt'));
+        if ($this->username==='root')
+            return sha1($password . $this->getAuthKey() . Setting::get('password_salt'));
+            
+        return Yii::$app->security->generatePasswordHash($password);
     }
 
     private function generateAuthKey()
