@@ -103,6 +103,11 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
         return static::findOne(['username' => $username]);
     }
 
+    public static function findByMobile($mobile)
+    {
+        return static::findOne(['mobile' => $mobile]);
+    }
+
     public function getId()
     {
         return $this->user_id;
