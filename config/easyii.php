@@ -42,10 +42,10 @@ return [
         ],
         'ucpass' => [
             'class' => 'yii\easyii\components\Ucpaas',
-            'accountSid' => 'bd6059ac74f198dbbea172222436ebec',
-            'token' => 'f8d89bb1046ec3d1aaf99292d0867d31',
-            'appId' => '63e29207ac85437f889be1e81a747da3',
-            'templateId' => '35446',
+            'accountSid' => '',
+            'token' => '',
+            'appId' => '',
+            'templateId' => '',
         ],
     ],
     'as access' => [
