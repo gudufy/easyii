@@ -1,10 +1,10 @@
 <?php
-namespace yii\easyii\modules\Client\api;
+namespace yii\easyii\modules\client\api;
 
 use Yii;
 use yii\easyii\components\API;
 use yii\easyii\helpers\Data;
-use yii\easyii\modules\Client\models\Client as ClientModel;
+use yii\easyii\modules\client\models\Client as ClientModel;
 use yii\helpers\Html;
 use yii\helpers\Url;
 

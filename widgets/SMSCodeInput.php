@@ -12,6 +12,8 @@ class SMSCodeInput extends InputWidget
 {
     public $template = '{input} {button}';
     public $validator = false;
+    public $placeholder = '';
+    public $btnCssClass = 'btn btn-primary';
 
     public function init()
     {
@@ -29,12 +31,12 @@ class SMSCodeInput extends InputWidget
         $id = $this->options['id'];
         $view = $this->view;
         if ($this->hasModel()) {
-            $input = Html::activeTextInput($this->model, $this->attribute, ['style'=>'width:100px;padding:5px;']);
+            $input = Html::activeTextInput($this->model, $this->attribute, ['style'=>'width:100px;padding:5px;','placeholder'=>$this->placeholder]);
         } else {
-            $input = Html::textInput($this->name, $this->value, ['class'=> "form-control"]);
+            $input = Html::textInput($this->name, $this->value, ['class'=> "form-control",'placeholder'=>$this->placeholder]);
         }
 
-        $button = Html::a('发送验证码', 'javascript:;', ['id'=>'btn-'.$id.'','class'=>'btn btn-primary']);
+        $button = Html::a('发送验证码', 'javascript:;', ['id'=>'btn-'.$id.'','class'=>$this->btnCssClass]);
 
         echo strtr($this->template, [
             '{input}' => $input,

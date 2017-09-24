@@ -25,7 +25,7 @@ $this->title = Yii::t('easyii', 'Admins');
 <?php foreach($data->models as $user) : ?>
     <tr>
         <td><?= $user->user_id ?></td>
-        <td><a href="<?= Url::to(['/admin/users/edit', 'id' => $user->user_id]) ?>"><?= $user->username ?></a></td>
+        <td><a href="<?= Url::to(['/admin/admins/edit', 'id' => $user->user_id]) ?>"><?= $user->username ?></a></td>
         <td><?= $user->name ?></td>
         <td><?= $user->mobile ?></td>
         <td><?= $user->getSexText() ?></td>
@@ -33,10 +33,10 @@ $this->title = Yii::t('easyii', 'Admins');
             <?= Html::checkbox('', $user->status == User::STATUS_ON, [
                 'class' => 'switch',
                 'data-id' => $user->primaryKey,
-                'data-link' => Url::to(['/admin/users/']),
+                'data-link' => Url::to(['/admins/users/']),
             ]) ?>
         </td>
-        <td><a href="<?= Url::to(['/admin/users/delete', 'id' => $user->user_id]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
+        <td><a href="<?= Url::to(['/admin/admins/delete', 'id' => $user->user_id]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
     </tr>
 <?php endforeach; ?>
 </tbody>

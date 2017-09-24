@@ -1,7 +1,7 @@
 <?php
-namespace yii\easyii\modules\clientl\api;
+namespace yii\easyii\modules\client\api;
 
-class ClientlObject extends \yii\easyii\components\ApiObject
+class ClientObject extends \yii\easyii\components\ApiObject
 {
     public $image;
     public $link;

@@ -145,13 +145,12 @@ $moduleName = $this->context->module->id;
                 <i class="glyphicon glyphicon-folder-close"></i>
                 <span><?= Yii::t('easyii', 'Modules') ?></span>
             </a></li>
-            
+
+        <?php endif; ?>
             <li class="<?= ($moduleName == 'admin' && $this->context->id == 'system') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/system']) ?>" class="menu-item">
                 <i class="glyphicon glyphicon-hdd"></i>
                 <span><?= Yii::t('easyii', 'System') ?></span>
             </a></li>
-            
-        <?php endif; ?>
       </ul>
     </section>
     <!-- /.sidebar -->

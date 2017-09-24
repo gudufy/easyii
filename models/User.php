@@ -30,7 +30,12 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
             ['password_hash', 'required', 'on' => 'create'],
             ['password_hash', 'safe'],
             ['image', 'image'],
-            ['access_token', 'default', 'value' => null]
+            ['access_token', 'default', 'value' => null],
+            [['company','address','phone','fax'],'string'],
+
+            ['email', 'filter', 'filter' => 'trim'],
+            ['email', 'email'],
+
         ];
     }
 
@@ -43,6 +48,10 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
             'name' => Yii::t('easyii', 'Full Name'),
             'mobile' => Yii::t('easyii', 'Mobile'),
             'sex' => Yii::t('easyii', 'Gender'),
+            'company' => Yii::t('easyii', 'Company'),
+            'address' => Yii::t('easyii', 'Address'),
+            'phone' => Yii::t('easyii', 'Phone'),
+            'fax' => Yii::t('easyii', 'Fax'),
         ];
     }
 
@@ -51,13 +60,18 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
         if (parent::beforeSave($insert)) {
             if ($this->isNewRecord) {
                 if ($this->username == 'root'){
-                    $this->addError('username', Yii::t('easyii', 'The username cannot be used.'));
+                    $this->addError('username', Yii::t('easyii', '该用户名已经被使用.'));
                     return false;
                 }
 
                 $this->auth_key = $this->generateAuthKey();
                 $this->password_hash = $this->hashPassword($this->password_hash);
             } else {
+                if ($this->email != $this->oldAttributes['email'] && static::findByEmail($this->email) !== null){
+                    $this->addError('email', Yii::t('easyii', '该邮箱已经被使用.'));
+                    return false;
+                }
+                
                 $this->password_hash = $this->password_hash != '' ? $this->hashPassword($this->password_hash) : $this->oldAttributes['password_hash'];
             }
             return true;
@@ -106,6 +120,11 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
     public static function findByMobile($mobile)
     {
         return static::findOne(['mobile' => $mobile]);
+    }
+
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]);
     }
 
     public function getId()

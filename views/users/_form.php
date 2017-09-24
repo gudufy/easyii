@@ -14,6 +14,11 @@
 <?= $form->field($model, 'password_hash')->passwordInput(['value' => '']) ?>
 <?= $form->field($model, 'name')->textInput() ?>
 <?= $form->field($model, 'mobile')->textInput() ?>
+<?= $form->field($model, 'email')->textInput() ?>
 <?= $form->field($model, 'sex')->radioList($model->getSexs()) ?>
+<?= $form->field($model, 'company')->textInput() ?>
+<?= $form->field($model, 'address')->textInput() ?>
+<?= $form->field($model, 'phone')->textInput() ?>
+<?= $form->field($model, 'fax')->textInput() ?>
 <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end(); ?>

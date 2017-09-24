@@ -1,5 +1,5 @@
 <?php
-namespace yii\easyii\modules\Client;
+namespace yii\easyii\modules\client;
 
 class ClientModule extends \yii\easyii\components\Module
 {

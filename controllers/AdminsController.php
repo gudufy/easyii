@@ -2,6 +2,7 @@
 namespace yii\easyii\controllers;
 
 use Yii;
+use yii\web\UploadedFile;
 use yii\data\ActiveDataProvider;
 use yii\widgets\ActiveForm;
 use yii\easyii\models\User;
