@@ -1,5 +1,5 @@
 <?php
-namespace yii\easyii\modules\Client\models;
+namespace yii\easyii\modules\client\models;
 
 use Yii;
 use yii\easyii\behaviors\CacheFlush;

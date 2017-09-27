@@ -85,11 +85,7 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
     }
 
     public function getSexText(){
-        if($this->sex){
-            return $this->getSexs()[$this->sex];
-        }
-
-        return '';
+        return $this->getSexs()[$this->sex];
     }
 
     public static function findIdentity($id)

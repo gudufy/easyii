@@ -24,7 +24,7 @@ $moduleName = $this->context->module->id;
 <div class="wrapper" id="admin-body">
     <header class="main-header">
         <!-- Logo -->
-        <a href="<?= Url::to(['/site/index']) ?>" class="logo">
+        <a href="/" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini">CMS</span>
         <!-- logo for regular state and mobile devices -->

@@ -31,7 +31,7 @@ class SMSCodeInput extends InputWidget
         $id = $this->options['id'];
         $view = $this->view;
         if ($this->hasModel()) {
-            $input = Html::activeTextInput($this->model, $this->attribute, ['style'=>'width:100px;padding:5px;','placeholder'=>$this->placeholder]);
+            $input = Html::activeTextInput($this->model, $this->attribute, ['class'=> "form-control",'style'=>'width:100px;display:inline-block;','placeholder'=>$this->placeholder]);
         } else {
             $input = Html::textInput($this->name, $this->value, ['class'=> "form-control",'placeholder'=>$this->placeholder]);
         }
@@ -63,14 +63,18 @@ class SMSCodeInput extends InputWidget
             btn.click(function () {
                 var mobile = $('#{$id}mobile').val();
                 if (!checkMobile(mobile)) {
-                    alert('手机号格式错误!');
+                    swal('手机号格式错误!','', 'error',{
+                        timer: 2000
+                    });
                     return;
                 }
                 
                 btn.prop('disabled', true);
                 $.post('/site/send-sms-code?mobile=' + mobile + '&validator=$validator', function (data) {
                     if (data.success) {
-                        alert('验证码已经发送到您的手机!');
+                        swal('验证码已经发送到您的手机!','', 'success',{
+                            timer: 2000
+                        });
                         var i = 60;
                         var s = setInterval(function () {
                             btn.text(i + '秒后重新发送');
@@ -83,7 +87,7 @@ class SMSCodeInput extends InputWidget
                     }
                     else {
                         btn.prop('disabled', false);
-                        alert(data.msg);
+                        swal(data.msg,'', 'error');
                     }
                 });
             });

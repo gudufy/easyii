@@ -1,5 +1,5 @@
 <?php
-namespace yii\easyii\modules\Client\controllers;
+namespace yii\easyii\modules\client\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
 
 use yii\easyii\components\Controller;
-use yii\easyii\modules\Client\models\Client;
+use yii\easyii\modules\client\models\Client;
 use yii\easyii\helpers\Image;
 use yii\easyii\behaviors\SortableController;
 use yii\easyii\behaviors\StatusController;
