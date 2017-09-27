@@ -34,7 +34,8 @@
         "bower-asset/jquery.switcher": "*",
         "bower-asset/eonasdan-bootstrap-datetimepicker": "^4.7@dev",
         "2amigos/yii2-selectize-widget": "~1.0",
-        "pjkui/kindeditor": "*"
+        "pjkui/kindeditor": "*",
+        "moonlandsoft/yii2-phpexcel": "*"
     },
     "autoload": {
         "psr-4": {
