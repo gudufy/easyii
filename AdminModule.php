@@ -91,6 +91,26 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
             define('LIVE_EDIT', !Yii::$app->user->isGuest && Yii::$app->session->get('easyii_live_edit'));
         }
 
+        Yii::$app->set('mailer', [
+            'class' => 'yii\swiftmailer\Mailer',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => Setting::get('smtp_host'),
+                'username' =>Setting::get('smtp_username'),
+                'password' => Setting::get('smtp_password'),
+                'port' => Setting::get('smtp_port'),
+                'encryption' => Setting::get('smtp_encryption'),
+            ],
+        ]);
+
+        Yii::$app->set('ucpass', [
+            'class' => 'yii\easyii\components\Ucpaas',
+            'accountSid' => Setting::get('ucpass_sid'),
+            'token' =>Setting::get('ucpass_token'),
+            'appId' => Setting::get('ucpass_appId'),
+            'templateId' => Setting::get('ucpass_templateId'),
+        ]);
+
         if (class_exists('yii\jui\JuiAsset')) {
             Yii::$container->set('yii\easyii\modules\rbac\AutocompleteAsset', 'yii\jui\JuiAsset');
         }
@@ -100,7 +120,7 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
     {
         Yii::setAlias('easyii', '@vendor/gudufy/easyii');
 
-        if (!$app->user->isGuest){
+        if (!$app->user->isGuest && isset($app->param['liveEdit'])){
             if (($app->user->can('/admin/*') || $app->user->identity->isRoot()) && strpos($app->request->pathInfo, 'admin') === false) {
                 $app->on(Application::EVENT_BEFORE_REQUEST, function () use ($app) {
                     $app->getView()->on(View::EVENT_BEGIN_BODY, [$this, 'renderToolbar']);

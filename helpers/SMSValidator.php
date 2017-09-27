@@ -26,13 +26,16 @@ class SMSValidator extends Validator
         if ($sms === null) {
             $this->addError($model,$attribute,'验证码输入错误,请重新输入');
         }
-        // 判断是否失效
-        if (time() - $sms['created_at'] > $sms['valid_second']) {
-            $this->addError($model,$attribute,'您的验证码已过期,请重新获取');
-        }
         else{
-            $sms->used = 1;
-            $sms->save();
+            // 判断是否失效
+            if (time() - $sms['created_at'] > $sms['valid_second']) {
+                $this->addError($model,$attribute,'您的验证码已过期,请重新获取');
+            }
+            else{
+                $sms->used = 1;
+                $sms->save();
+            }
         }
+        
     }
 }

@@ -36,7 +36,7 @@ class Feedback extends \yii\easyii\components\API
         ob_start();
         $form = ActiveForm::begin([
             'enableClientValidation' => true,
-            'action' => Url::to(['/admin/feedback/send'])
+            'action' => Url::to([$options['action'] ? $options['action'] : '/admin/feedback/send'])
         ]);
 
         echo Html::hiddenInput('errorUrl', $options['errorUrl'] ? $options['errorUrl'] : Url::current([self::SENT_VAR => 0]));

@@ -40,13 +40,7 @@ return [
         'formatter' => [
             'sizeFormatBase' => 1000
         ],
-        'ucpass' => [
-            'class' => 'yii\easyii\components\Ucpaas',
-            'accountSid' => '',
-            'token' => '',
-            'appId' => '',
-            'templateId' => '',
-        ],
+        
     ],
     'as access' => [
         'class' => 'yii\easyii\modules\rbac\components\AccessControl',
