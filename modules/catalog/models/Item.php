@@ -2,7 +2,7 @@
 namespace yii\easyii\modules\catalog\models;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\models\Photo;
 

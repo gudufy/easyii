@@ -2,7 +2,7 @@
 namespace yii\easyii\components;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SeoBehavior;
 use creocoder\nestedsets\NestedSetsBehavior;
