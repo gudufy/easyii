@@ -120,7 +120,7 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
     {
         Yii::setAlias('easyii', '@vendor/gudufy/easyii');
 
-        if (!$app->user->isGuest && isset($app->param['liveEdit'])){
+        if (!$app->user->isGuest && isset($app->params['liveEdit']) && $app->params['liveEdit'] === true){
             if (($app->user->can('/admin/*') || $app->user->identity->isRoot()) && strpos($app->request->pathInfo, 'admin') === false) {
                 $app->on(Application::EVENT_BEFORE_REQUEST, function () use ($app) {
                     $app->getView()->on(View::EVENT_BEGIN_BODY, [$this, 'renderToolbar']);
