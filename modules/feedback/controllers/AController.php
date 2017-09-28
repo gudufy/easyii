@@ -75,13 +75,20 @@ class AController extends Controller
             {
                 $model->answer_subject = filter_var($postData['answer_subject'], FILTER_SANITIZE_STRING);
                 $model->answer_text = filter_var($postData['answer_text'], FILTER_SANITIZE_STRING);
-                if($model->sendAnswer()){
-                    $model->status = Feedback::STATUS_ANSWERED;
-                    $model->save();
-                    $this->flash('success', Yii::t('easyii/feedback', 'Answer successfully sent'));
+                if ($model->email){
+                    if($model->sendAnswer()){
+                        $model->status = Feedback::STATUS_ANSWERED;
+                        $model->save();
+                        $this->flash('success', Yii::t('easyii/feedback', 'Answer successfully sent'));
+                    }
+                    else{
+                        $this->flash('error', Yii::t('easyii/feedback', 'An error has occurred while sending mail'));
+                    }
                 }
                 else{
-                    $this->flash('error', Yii::t('easyii/feedback', 'An error has occurred while sending mail'));
+                    $model->save();
+
+                    $this->flash('success', Yii::t('easyii/feedback', 'Answer successfully sent'));
                 }
             }
             else {

@@ -4,6 +4,7 @@ return [
     'View feedback' => '查看反馈',
     'Feedback deleted' => '反馈删除成功',
     'Feedback updated' => '反馈修改成功',
+    'Name' => '联系人',
     'Answer' => '回答',
     'Subject' => '主题',
     'Phone' => '电话',

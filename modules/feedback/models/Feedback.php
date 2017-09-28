@@ -27,7 +27,7 @@ class Feedback extends \yii\easyii\components\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'email', 'text'], 'required'],
+            [['name', 'phone'], 'required'],
             [['name', 'email', 'phone', 'title', 'text'], 'trim'],
             [['name','title', 'text'], EscapeValidator::className()],
             ['title', 'string', 'max' => 128],
@@ -66,7 +66,7 @@ class Feedback extends \yii\easyii\components\ActiveRecord
     {
         return [
             'email' => 'E-mail',
-            'name' => Yii::t('easyii', 'Name'),
+            'name' => Yii::t('easyii/feedback', 'Name'),
             'title' => Yii::t('easyii', 'Title'),
             'text' => Yii::t('easyii', 'Text'),
             'answer_subject' => Yii::t('easyii/feedback', 'Subject'),
