@@ -92,15 +92,27 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
         }
 
         Yii::$app->set('mailer', [
-            'class' => 'yii\swiftmailer\Mailer',
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => Setting::get('smtp_host'),
-                'username' =>Setting::get('smtp_username'),
-                'password' => Setting::get('smtp_password'),
-                'port' => Setting::get('smtp_port'),
-                'encryption' => Setting::get('smtp_encryption'),
+            'class'            => 'yii\easyii\phpmailer\Mailer',
+            'viewPath'         => '@app/mail',
+            'useFileTransport' => false,
+            'config'           => [
+                'mailer'     => 'smtp',
+                'host'       => Setting::get('smtp_host'),
+                'port'       => Setting::get('smtp_port'),
+                'smtpsecure' => Setting::get('smtp_encryption'),
+                'smtpauth'   => true,
+                'username'   => Setting::get('smtp_username'),
+                'password'   => Setting::get('smtp_password'),
             ],
+            //'class' => 'yii\swiftmailer\Mailer',
+            //'transport' => [
+            //    'class' => 'Swift_SmtpTransport',
+            //    'host' => Setting::get('smtp_host'),
+            //    'username' =>Setting::get('smtp_username'),
+            //    'password' => Setting::get('smtp_password'),
+            //    'port' => Setting::get('smtp_port'),
+            //    'encryption' => Setting::get('smtp_encryption'),
+            //],
         ]);
 
         Yii::$app->set('ucpass', [
