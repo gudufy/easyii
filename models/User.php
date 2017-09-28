@@ -31,7 +31,7 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
             ['password_hash', 'safe'],
             ['image', 'image'],
             ['access_token', 'default', 'value' => null],
-            [['company','address','phone','fax'],'string'],
+            [['company','address','phone','fax','openid','access_token','refresh_token'],'string'],
 
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'email'],
