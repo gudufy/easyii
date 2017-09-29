@@ -52,7 +52,7 @@ class Feedback extends \yii\easyii\components\API
 
         if($settings['enableCaptcha']) echo $form->field($model, 'reCaptcha')->widget(ReCaptcha::className());
 
-        echo Html::submitButton(Yii::t('easyii', 'Send'), ['class' => 'btn btn-primary']);
+        echo Html::submitButton(Yii::t('easyii', 'Send'), ['class' => isset($options['btnCssClass']) ? $options['btnCssClass'] : 'btn btn-primary']);
         ActiveForm::end();
 
         return ob_get_clean();

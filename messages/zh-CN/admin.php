@@ -88,7 +88,7 @@ return [
     'Module settings updated' => '已更新模块设置',
     'Module default settings was restored' => '模块的默认设置已被恢复',
 
-    'Users' => '用户管理',
+    'Users' => '客户管理',
     'Create user' => '添加用户',
     'Edit user' => '修改用户',
     'User created' => '用户创建成功',
@@ -100,6 +100,10 @@ return [
     'Mobile' => '手机',
     'Man' => '先生',
     'Woman' => '女士',
+    'Company' => '公司名称',
+    'Address' => '地址',
+    'Phone' => '电话',
+    'Fax' => '传真',
 
     'Photos' => '相册',
     'Photo count' => '照片总数',

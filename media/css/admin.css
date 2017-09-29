@@ -57,3 +57,7 @@ h4 b{
     text-decoration: none;
     color: #333;
 }
+
+table{
+    table-layout: fixed;
+}

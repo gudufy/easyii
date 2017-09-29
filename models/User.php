@@ -33,7 +33,7 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
             ['image', 'image'],
             ['access_token', 'default', 'value' => null],
             [['company','address','phone','fax','openid','access_token','refresh_token'],'string'],
-
+            [['created_at'],'integer'],
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'email'],
 
@@ -79,6 +79,7 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
 
                 $this->auth_key = $this->generateAuthKey();
                 $this->password_hash = $this->hashPassword($this->password_hash);
+                $this->created_at = time();
             } else {
                 if ($this->email != $this->oldAttributes['email'] && static::findByEmail($this->email) !== null){
                     $this->addError('email', Yii::t('easyii', '该邮箱已经被使用.'));
