@@ -6,6 +6,7 @@ use yii\web\UploadedFile;
 use yii\data\ActiveDataProvider;
 use yii\widgets\ActiveForm;
 use yii\easyii\models\User;
+use yii\easyii\modules\rbac\models\Assignment;
 
 class AdminsController extends \yii\easyii\components\Controller
 {
@@ -14,6 +15,12 @@ class AdminsController extends \yii\easyii\components\Controller
         $data = new ActiveDataProvider([
             'query' => User::findByRole('administrator')->desc(),
         ]);
+
+        if(Yii::$app->request->isAjax){
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return $data->models;
+        }
+
         Yii::$app->user->setReturnUrl(['/admin/admins']);
 
         return $this->render('index', [
@@ -51,15 +58,13 @@ class AdminsController extends \yii\easyii\components\Controller
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
-                    return $this->refresh();
                 }
             }
         }
-        else {
-            return $this->render('create', [
-                'model' => $model
-            ]);
-        }
+        
+        return $this->render('create', [
+            'model' => $model
+        ]);
     }
 
     public function actionEdit($id)
@@ -90,18 +95,18 @@ class AdminsController extends \yii\easyii\components\Controller
                 
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii', 'Admin updated'));
+                    return $this->refresh();
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
                 }
-                return $this->refresh();
+
             }
         }
-        else {
-            return $this->render('edit', [
-                'model' => $model
-            ]);
-        }
+        
+        return $this->render('edit', [
+            'model' => $model
+        ]);
     }
 
     public function actionDelete($id)

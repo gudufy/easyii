@@ -27,6 +27,12 @@ class UsersController extends \yii\easyii\components\Controller
         $data = new ActiveDataProvider([
             'query' => User::findByRole('user')->desc(),
         ]);
+
+        if(Yii::$app->request->isAjax){
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return $data->models;
+        }
+
         Yii::$app->user->setReturnUrl(['/admin/users']);
 
         return $this->render('index', [
@@ -64,15 +70,12 @@ class UsersController extends \yii\easyii\components\Controller
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
-                    return $this->refresh();
                 }
             }
         }
-        else {
-            return $this->render('create', [
-                'model' => $model
-            ]);
-        }
+        return $this->render('create', [
+            'model' => $model
+        ]);
     }
 
     public function actionEdit($id)
@@ -103,18 +106,18 @@ class UsersController extends \yii\easyii\components\Controller
 
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii', 'User updated'));
+                    return $this->refresh();
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
                 }
-                return $this->refresh();
+                
             }
         }
-        else {
-            return $this->render('edit', [
-                'model' => $model
-            ]);
-        }
+        
+        return $this->render('edit', [
+            'model' => $model
+        ]);
     }
 
     public function actionDelete($id)

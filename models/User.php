@@ -25,7 +25,8 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
     public function rules()
     {
         return [
-            [['username','mobile','name','sex'], 'required'],
+            [['mobile','name','sex'], 'required'],
+            ['mobile','match','pattern'=>'/^1[0-9]{10}$/','message'=>'{attribute}必须为1开头的11位纯数字'],
             ['username', 'unique'],
             ['password_hash', 'required', 'on' => 'create'],
             ['password_hash', 'safe'],
@@ -64,11 +65,28 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
                     return false;
                 }
 
+                $this->username = $this->username ? $this->username:  $this->mobile;
+
+                if (static::findByMobile($this->mobile) !== null){
+                    $this->addError('mobile', Yii::t('easyii', '该手机号已经被使用.'));
+                    return false;
+                }
+
+                if (static::findByUsername($this->username) !== null){
+                    $this->addError('username', Yii::t('easyii', '该用户名已经被使用.'));
+                    return false;
+                }
+
                 $this->auth_key = $this->generateAuthKey();
                 $this->password_hash = $this->hashPassword($this->password_hash);
             } else {
                 if ($this->email != $this->oldAttributes['email'] && static::findByEmail($this->email) !== null){
                     $this->addError('email', Yii::t('easyii', '该邮箱已经被使用.'));
+                    return false;
+                }
+
+                if ($this->mobile != $this->oldAttributes['mobile'] && static::findByMobile($this->mobile) !== null){
+                    $this->addError('mobile', Yii::t('easyii', '该手机已经被使用.'));
                     return false;
                 }
                 

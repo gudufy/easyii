@@ -14,6 +14,7 @@
 <?= $form->field($model, 'password_hash')->passwordInput(['value' => '']) ?>
 <?= $form->field($model, 'name')->textInput() ?>
 <?= $form->field($model, 'mobile')->textInput() ?>
+<?= $form->field($model, 'email')->textInput() ?>
 <?= $form->field($model, 'sex')->radioList($model->getSexs()) ?>
 <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end(); ?>

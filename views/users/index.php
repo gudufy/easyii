@@ -13,10 +13,10 @@ $this->title = Yii::t('easyii', 'Users');
         <thead>
         <tr>
             <th width="50">#</th>
-            <th><?= Yii::t('easyii', 'Username') ?></th>
-            <th><?= Yii::t('easyii', 'Full Name') ?></th>
             <th><?= Yii::t('easyii', 'Mobile') ?></th>
-            <th><?= Yii::t('easyii', 'Gender') ?></th>
+            <th><?= Yii::t('easyii', 'Company') ?></th>
+            <th><?= Yii::t('easyii', 'Full Name') ?></th>
+            <th><?= Yii::t('easyii', 'Email') ?></th>
             <th width="100"><?= Yii::t('easyii', 'Status') ?></th>
             <th width="30"></th>
         </tr>
@@ -25,10 +25,10 @@ $this->title = Yii::t('easyii', 'Users');
         <?php foreach($data->models as $user) : ?>
             <tr>
                 <td><?= $user->user_id ?></td>
-                <td><a href="<?= Url::to(['/admin/users/edit', 'id' => $user->user_id]) ?>"><?= $user->username ?></a></td>
-                <td><?= $user->name ?></td>
-                <td><?= $user->mobile ?></td>
-                <td><?= $user->getSexText() ?></td>
+                <td><a href="<?= Url::to(['/admin/users/edit', 'id' => $user->user_id]) ?>"><?= $user->mobile ?></a></td>
+                <td><?= $user->company ?></td>
+                <td><?= $user->name ?> <?= $user->getSexText() ?></td>
+                <td><?= $user->email ?></td>
                 <td class="status vtop">
                     <?= Html::checkbox('', $user->status == User::STATUS_ON, [
                         'class' => 'switch',
