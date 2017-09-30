@@ -18,7 +18,7 @@ $this->title = Yii::t('easyii', 'Admins');
     <th><?= Yii::t('easyii', 'Mobile') ?></th>
     <th><?= Yii::t('easyii', 'Gender') ?></th>
     <th width="100"><?= Yii::t('easyii', 'Status') ?></th>
-    <th width="30"></th>
+    <th width="80"></th>
 </tr>
 </thead>
 <tbody>
@@ -36,7 +36,8 @@ $this->title = Yii::t('easyii', 'Admins');
                 'data-link' => Url::to(['/admins/users/']),
             ]) ?>
         </td>
-        <td><a href="<?= Url::to(['/admin/admins/delete', 'id' => $user->user_id]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
+        <td><a href="<?= Url::to(['/admin/admins/delete', 'id' => $user->user_id]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a>
+        &nbsp; &nbsp; <a href="<?=Url::to(['/admin/admins/assignment', 'id' => $user->user_id]) ?>" title="分配权限"><span class="glyphicon glyphicon-cog"></span></a></td>
     </tr>
 <?php endforeach; ?>
 </tbody>

@@ -13,7 +13,7 @@ if($model->status == Feedback::STATUS_ANSWERED) {
 <?= $this->render('_menu', ['noanswer' => $model->status == Feedback::STATUS_ANSWERED]) ?>
 
 <dl class="dl-horizontal feedback-view">
-    <dt><?= Yii::t('easyii', 'Name') ?></dt>
+    <dt><?= Yii::t('easyii/feedback', 'Name') ?></dt>
     <dd><?= $model->name ?></dd>
 
     <dt>E-mail</dt>

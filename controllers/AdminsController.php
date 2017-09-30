@@ -55,7 +55,7 @@ class AdminsController extends \yii\easyii\components\Controller
                     $success = $role->assign(['administrator']);
 
                     $this->flash('success', Yii::t('easyii', 'Admin created'));
-                    return $this->redirect(['/admin/admins']);
+                    return $this->redirect(['/admin/admins/assignment/'.$model->primaryKey]);
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -108,6 +108,46 @@ class AdminsController extends \yii\easyii\components\Controller
         return $this->render('edit', [
             'model' => $model
         ]);
+    }
+
+     public function actionAssignment($id)
+     {
+         $model = self::findModel($id);
+ 
+         return $this->render('@easyii/modules/rbac/views/assignment/view', [
+                 'model' => $model,
+                 'idField' => 'id',
+                 'usernameField' => 'username',
+                 'fullnameField' => '',
+         ]);
+    }
+
+     /**
+     * Assign items
+     * @param string $id
+     * @return array
+     */
+    public function actionAssign($id)
+    {
+        $items = Yii::$app->getRequest()->post('items', []);
+        $model = new Assignment($id);
+        $success = $model->assign($items);
+        Yii::$app->getResponse()->format = 'json';
+        return array_merge($model->getItems(), ['success' => $success]);
+    }
+
+    /**
+     * Assign items
+     * @param string $id
+     * @return array
+     */
+    public function actionRevoke($id)
+    {
+        $items = Yii::$app->getRequest()->post('items', []);
+        $model = new Assignment($id);
+        $success = $model->revoke($items);
+        Yii::$app->getResponse()->format = 'json';
+        return array_merge($model->getItems(), ['success' => $success]);
     }
 
     public function actionDelete($id)
@@ -184,5 +224,17 @@ class AdminsController extends \yii\easyii\components\Controller
     public function actionOff($id)
     {
         return $this->changeStatus($id, User::STATUS_OFF);
+    }
+
+    protected function findModel($id)
+    {
+        $userClassName = Yii::$app->getUser()->identityClass;
+        $userClassName = $userClassName ? : 'yii\easyii\modules\rbac\models\User';
+        $class = $userClassName;
+        if (($user = $class::findIdentity($id)) !== null) {
+            return new Assignment($id, $user);
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }

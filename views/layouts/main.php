@@ -5,6 +5,7 @@ use yii\widgets\Breadcrumbs;
 use yii\easyii\assets\AdminAsset;
 use yii\easyii\helpers\Data;
 use yii\easyii\models\Setting;
+use yii\easyii\modules\rbac\components\Helper;
 
 $asset = AdminAsset::register($this);
 $moduleName = $this->context->module->id;
@@ -93,6 +94,7 @@ $moduleName = $this->context->module->id;
           </a>
           <ul class="treeview-menu">
             <?php foreach(Yii::$app->getModule('admin')->activeModules as $module) : ?>
+                <?php if(Helper::checkRoute('/admin/'.$module->name.'/*') || Helper::checkRoute('/admin/'.$module->name.'/a/index')) : ?>
                 <li class="<?= ($moduleName == $module->name ? 'active' : '') ?>">
                 <a href="<?= Url::to(["/admin/$module->name"]) ?>" class="menu-item">
                     <i class="fa fa-circle-o"></i>  <?=$module->title?>
@@ -100,13 +102,17 @@ $moduleName = $this->context->module->id;
                         <span class="badge"><?= $module->notice ?></span>
                     <?php endif; ?>
                 </a></li>
+                <?php endif; ?>
             <?php endforeach; ?>
           </ul>
         </li>  
+        <?php if(Helper::checkRoute('/admin/users/*')) : ?>
         <li class="<?= ($moduleName == 'admin' && $this->context->id == 'users') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/users']) ?>" class="menu-item">
                 <i class="glyphicon glyphicon-user"></i>
                 <span><?= Yii::t('easyii', 'Users') ?></span>
             </a></li>
+        <?php endif; ?>
+        <?php if(Helper::checkRoute('/*')) : ?>
         <li class="header">System</li>
         <li class="<?= ($moduleName == 'admin' && $this->context->id == 'settings') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/settings']) ?>" class="menu-item">
             <i class="glyphicon glyphicon-cog"></i>
@@ -149,6 +155,7 @@ $moduleName = $this->context->module->id;
                 <i class="glyphicon glyphicon-hdd"></i>
                 <span><?= Yii::t('easyii', 'System') ?></span>
             </a></li>
+        <?php endif; ?>
       </ul>
     </section>
     <!-- /.sidebar -->

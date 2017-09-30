@@ -9,21 +9,21 @@ use yii\easyii\models\User;
 use yii\easyii\models\SMSCode;
 
 class SMSCodeAction extends Action {
-    public function run($validator = false) {
+    public function run($validator = null) {
         Yii::$app->getResponse()->format = 'json';
         $result = [];
 
         $mobile = Yii::$app->request->getQueryParam('mobile');
 
-        if ($validator != null){
-            if($validator && !User::findByMobile($mobile)){
+        if ($validator){
+            if($validator == 'forget' && !User::findByMobile($mobile)){
                 $result['success'] = false;
                 $result['msg'] = '该手机号还未注册。';
     
                 return $result;
             }
     
-            if(!$validator && User::findByMobile($mobile)){
+            if($validator == 'reg' && User::findByMobile($mobile)){
                 $result['success'] = false;
                 $result['msg'] = '该手机号已被注册。';
     
