@@ -50,16 +50,14 @@ $moduleName = $this->context->module->id;
                 </a>
                 <ul class="dropdown-menu">
                     <li class="user-footer">
-                        <?php if(!IS_ROOT) : ?>
                         <div class="pull-left" style="width:45%;">
                             <?= Html::a(
                                 Yii::t('easyii','Edit password'),
-                                ['/admin/admins/change-pwd/'.Yii::$app->user->identity->id],
+                                [IS_ROOT ? '/admin/admins/change-root-pwd' : '/admin/admins/change-pwd/'.Yii::$app->user->identity->id],
                                 ['class' => 'btn btn-default btn-flat btn-block']
                             ) ?>
                         </div>
-                        <?php endif; ?>
-                        <div class="pull-right" style="<?=IS_ROOT ? 'width:90%;' : 'width:45%;' ?>">
+                        <div class="pull-right" style="width:45%;">
                             <?= Html::a(
                                 Yii::t('easyii','Logout'),
                                 ['/admin/sign/out'],

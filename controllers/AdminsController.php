@@ -6,6 +6,7 @@ use yii\web\UploadedFile;
 use yii\data\ActiveDataProvider;
 use yii\widgets\ActiveForm;
 use yii\easyii\models\User;
+use yii\easyii\models\ChangeRootPassword;
 use yii\easyii\modules\rbac\models\Assignment;
 
 class AdminsController extends \yii\easyii\components\Controller
@@ -148,6 +149,31 @@ class AdminsController extends \yii\easyii\components\Controller
                 'model' => $model
             ]);
         }
+    }
+
+    public function actionChangeRootPwd()
+    {
+        $model = new ChangeRootPassword;
+
+        if ($model->load(Yii::$app->request->post())) {
+            if(Yii::$app->request->isAjax){
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
+            else{
+                if($model->change()){
+                    $this->flash('success', Yii::t('easyii', 'Password updated'));
+                }
+                else{
+                    $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
+                }
+                return $this->refresh();
+            }
+        }
+
+        return $this->render('change_root_pwd', [
+            'model' => $model
+        ]);
     }
 
     public function actionOn($id)
