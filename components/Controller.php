@@ -48,7 +48,7 @@ class Controller extends \yii\web\Controller
             return false;
         }
         else{
-            if(!IS_ROOT && ($this->rootActions == 'all' || in_array($action->id, $this->rootActions))){
+            if(!IS_ROOT && !Yii::$app->user->can('administrator')){
                 throw new \yii\web\ForbiddenHttpException('You cannot access this action');
             }
 
