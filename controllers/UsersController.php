@@ -120,6 +120,20 @@ class UsersController extends \yii\easyii\components\Controller
         ]);
     }
 
+    public function actionView($id)
+    {
+        $model = User::findOne($id);
+
+        if($model === null){
+            $this->flash('error', Yii::t('easyii', 'Not found'));
+            return $this->redirect(['/admin/users']);
+        }
+        
+        return $this->render('view', [
+            'model' => $model
+        ]);
+    }
+
     public function actionDelete($id)
     {
         if(($model = User::findOne($id))){

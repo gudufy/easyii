@@ -84,29 +84,18 @@ $moduleName = $this->context->module->id;
             <i class="fa fa-dashboard"></i> <span><?=Yii::t('easyii','Dashboard') ?></span>
           </a>
         </li>
-        <li class="treeview<?= ($moduleName != 'rbac' && $moduleName != 'admin') ? ' active' :'' ?>">
-          <a href="#">
-            <i class="glyphicon glyphicon-th"></i>
-            <span><?= Yii::t('easyii', 'Content Manage') ?></span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <?php foreach(Yii::$app->getModule('admin')->activeModules as $module) : ?>
-                <?php if(Helper::checkRoute('/admin/'.$module->name.'/*') || Helper::checkRoute('/admin/'.$module->name.'/a/index')) : ?>
-                <li class="<?= ($moduleName == $module->name ? 'active' : '') ?>">
-                <a href="<?= Url::to(["/admin/$module->name"]) ?>" class="menu-item">
-                    <i class="fa fa-circle-o"></i>  <?=$module->title?>
-                    <?php if($module->notice > 0) : ?>
-                        <span class="badge"><?= $module->notice ?></span>
-                    <?php endif; ?>
-                </a></li>
-                <?php endif; ?>
-            <?php endforeach; ?>
-          </ul>
-        </li>  
-        <?php if(Helper::checkRoute('/admin/users/*')) : ?>
+        <?php foreach(Yii::$app->getModule('admin')->activeModules as $module) : ?>
+        <?php if(Helper::checkRoute('/admin/'.$module->name.'/*') || Helper::checkRoute('/admin/'.$module->name.'/a/index')) : ?>
+        <li class="<?= ($moduleName == $module->name ? 'active' : '') ?>">
+        <a href="<?= Url::to(["/admin/$module->name"]) ?>" class="menu-item">
+            <i class="glyphicon glyphicon-<?=$module->icon?>"></i>  <?=$module->title?>
+            <?php if($module->notice > 0) : ?>
+                <span class="badge"><?= $module->notice ?></span>
+            <?php endif; ?>
+        </a></li>
+        <?php endif; ?>
+        <?php endforeach; ?>
+        <?php if(Helper::checkRoute('/admin/users/*') || Helper::checkRoute('/admin/users/index')) : ?>
         <li class="<?= ($moduleName == 'admin' && $this->context->id == 'users') ? 'active' :'' ?>"><a href="<?= Url::to(['/admin/users']) ?>" class="menu-item">
                 <i class="glyphicon glyphicon-user"></i>
                 <span><?= Yii::t('easyii', 'Users') ?></span>

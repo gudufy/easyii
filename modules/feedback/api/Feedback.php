@@ -33,6 +33,16 @@ class Feedback extends \yii\easyii\components\API
         $settings = Yii::$app->getModule('admin')->activeModules['feedback']->settings;
         $options = array_merge($this->_defaultFormOptions, $options);
 
+        if ($user = Yii::$app->user->identity){
+            $model->name = $user->name;
+            $model->email = $user->email;
+            $model->phone = $user->mobile;
+        }
+
+        if (isset($options['defaultMessage'])){
+            $model->text = $options['defaultMessage'];
+        }
+
         ob_start();
         $form = ActiveForm::begin([
             'enableClientValidation' => true,
