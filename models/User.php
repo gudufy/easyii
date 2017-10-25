@@ -5,8 +5,6 @@ use Yii;
 
 class User extends \yii\easyii\components\ActiveRecord implements \yii\web\IdentityInterface
 {
-    public $total;
-    
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
     
@@ -27,7 +25,7 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
     public function rules()
     {
         return [
-            [['username','name','sex'], 'required'],
+            [['mobile','name','sex'], 'required'],
             ['mobile','match','pattern'=>'/^1[0-9]{10}$/','message'=>'{attribute}必须为1开头的11位纯数字'],
             ['username', 'unique'],
             ['password_hash', 'required', 'on' => 'create'],
@@ -93,7 +91,7 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
                     return false;
                 }
                 
-                $this->password_hash = $this->password_hash && $this->password_hash != '' ? $this->hashPassword($this->password_hash) : $this->oldAttributes['password_hash'];
+                $this->password_hash = $this->password_hash != '' ? $this->hashPassword($this->password_hash) : $this->oldAttributes['password_hash'];
             }
             return true;
         } else {

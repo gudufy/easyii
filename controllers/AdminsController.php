@@ -8,7 +8,6 @@ use yii\widgets\ActiveForm;
 use yii\easyii\models\User;
 use yii\easyii\models\ChangeRootPassword;
 use yii\easyii\modules\rbac\models\Assignment;
-use yii\easyii\behaviors\StatusController;
 
 class AdminsController extends \yii\easyii\components\Controller
 {
@@ -219,24 +218,12 @@ class AdminsController extends \yii\easyii\components\Controller
 
     public function actionOn($id)
     {
-        if(($model = User::findOne($id))){
-            $model->password_hash = '';
-            $model->status = User::STATUS_ON;
-            $model->update();
-        }
-        
-        return $this->formatResponse(Yii::t('easyii', 'Status successfully changed'));
+        return $this->changeStatus($id, User::STATUS_ON);
     }
 
     public function actionOff($id)
     {
-        if(($model = User::findOne($id))){
-            $model->password_hash = '';
-            $model->status = User::STATUS_OFF;
-            $model->update();
-        }
-        
-        return $this->formatResponse(Yii::t('easyii', 'Status successfully changed'));
+        return $this->changeStatus($id, User::STATUS_OFF);
     }
 
     protected function findModel($id)

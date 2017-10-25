@@ -12,6 +12,15 @@ use yii\easyii\behaviors\StatusController;
 
 class UsersController extends \yii\easyii\components\Controller
 {
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => StatusController::className(),
+                'model' => User::className()
+            ]
+        ];
+    }
 
     public function actionIndex()
     {
@@ -137,23 +146,11 @@ class UsersController extends \yii\easyii\components\Controller
 
     public function actionOn($id)
     {
-        if(($model = User::findOne($id))){
-            $model->password_hash = '';
-            $model->status = User::STATUS_ON;
-            $model->update();
-        }
-        
-        return $this->formatResponse(Yii::t('easyii', 'Status successfully changed'));
+        return $this->changeStatus($id, User::STATUS_ON);
     }
 
     public function actionOff($id)
     {
-        if(($model = User::findOne($id))){
-            $model->password_hash = '';
-            $model->status = User::STATUS_OFF;
-            $model->update();
-        }
-        
-        return $this->formatResponse(Yii::t('easyii', 'Status successfully changed'));
+        return $this->changeStatus($id, User::STATUS_OFF);
     }
 }
