@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\modules\shopcart\api;
 
+use Yii;
 use yii\easyii\modules\catalog\api\ItemObject;
+use yii\easyii\modules\guestbook\models\Guestbook;
 
 class GoodObject extends \yii\easyii\components\ApiObject
 {
@@ -37,5 +39,11 @@ class GoodObject extends \yii\easyii\components\ApiObject
     public function getSlug()
     {
         return $this->item->slug;
+    }
+
+    public function getIsGuestbook(){
+        return Guestbook::find()
+        ->where(['goods_id' => $this->item->id,'user_id'=>Yii::$app->user->getId()])
+        ->count() > 0;
     }
 }

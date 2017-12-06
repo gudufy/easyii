@@ -5,6 +5,7 @@ use Yii;
 use yii\easyii\components\API;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\catalog\models\Item;
+use yii\easyii\modules\guestbook\models\Guestbook;
 use yii\helpers\Url;
 
 class ItemObject extends \yii\easyii\components\ApiObject
@@ -16,8 +17,10 @@ class ItemObject extends \yii\easyii\components\ApiObject
     public $available;
     public $discount;
     public $time;
+    public $sub_title;
 
     private $_photos;
+    private $_guestbooks;
 
     public function getTitle(){
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
@@ -36,7 +39,7 @@ class ItemObject extends \yii\easyii\components\ApiObject
     }
 
     public function getOldPrice(){
-        return $this->model->price;
+        return $this->model->oldPrice;
     }
 
     public function getDate(){
@@ -53,6 +56,17 @@ class ItemObject extends \yii\easyii\components\ApiObject
             }
         }
         return $this->_photos;
+    }
+
+    public function getGuestbooks(){
+        if(!$this->_guestbooks){
+            $this->_guestbooks = [];
+
+            foreach(Guestbook::findBySql('SELECT a.*,b.image FROM easyii_guestbook a left join easyii_users b on a.user_id=b.user_id where a.status=1 and a.goods_id='.$this->id)->all() as $model){
+                $this->_guestbooks[] = new GuestbookObject($model);
+            }
+        }
+        return $this->_guestbooks;
     }
 
     public function getEditLink(){

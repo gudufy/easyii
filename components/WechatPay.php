@@ -13,7 +13,7 @@ class WechatPay
         $this->appid = $appid;
         $this->key = $key;
     }
-    public function createJsBizPackage($openid, $totalFee, $outTradeNo, $orderName, $notifyUrl, $timestamp)
+    public function createJsBizPackage($openid, $totalFee, $outTradeNo, $orderName, $notifyUrl, $timestamp,$trade_type = 'JSAPI')
     {
         $config = array(
             'mch_id' => $this->mchid,
@@ -31,8 +31,11 @@ class WechatPay
             'out_trade_no' => $outTradeNo,
             'spbill_create_ip' => '127.0.0.1',
             'total_fee' => intval($totalFee * 100),
-            'trade_type' => 'JSAPI',
+            'trade_type' => $trade_type,
         );
+        if ($trade_type == 'NATIVE'){
+            $unified['product_id'] = $outTradeNo.'666';
+        }
         $unified['sign'] = self::getSign($unified, $config['key']);
         $responseXml = self::curlPost('https://api.mch.weixin.qq.com/pay/unifiedorder', self::arrayToXml($unified));
         $unifiedOrder = simplexml_load_string($responseXml, 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -45,19 +48,24 @@ class WechatPay
         if ($unifiedOrder->result_code != 'SUCCESS') {
             die($unifiedOrder->err_code);
         }
-        $arr = array(
-            "appId" => $config['appid'],
-            "timeStamp" => $timestamp,
-            "nonceStr" => self::createNonceStr(),
-            "package" => "prepay_id=" . $unifiedOrder->prepay_id,
-            "signType" => 'MD5',
-        );
-        $arr['paySign'] = self::getSign($arr, $config['key']);
-        return $arr;
+
+        if($trade_type == 'JSAPI'){
+            $arr = array(
+                "appId" => $config['appid'],
+                "timeStamp" => (string)$timestamp,
+                "nonceStr" => self::createNonceStr(),
+                "package" => "prepay_id=" . $unifiedOrder->prepay_id,
+                "signType" => 'MD5',
+            );
+            $arr['paySign'] = self::getSign($arr, $config['key']);
+            return $arr;
+        }
+
+        return $unifiedOrder;
     }
     public function getSignPackage($url) {
         $jsapiTicket = self::getJsApiTicket();
-        $timestamp = time();
+        $timestamp = (string)time();
         $nonceStr = self::createNonceStr();
         // 这里参数的顺序要按照 key 值 ASCII 码升序排序
         $string = "jsapi_ticket=".$jsapiTicket."&noncestr=".$nonceStr."&timestamp=".$timestamp."&url=".$url;
@@ -65,12 +73,30 @@ class WechatPay
         $signPackage = array(
             "appId"     => $this->appid,
             "nonceStr"  => $nonceStr,
-            "timestamp" => $timestamp,
+            "timestamp" => (string)$timestamp,
             "url"       => $url,
             "signature" => $signature,
             "rawString" => $string
         );
         return $signPackage;
+    }
+    public function orderQuery($out_trade_no){
+        $config = array(
+            'mch_id' => $this->mchid,
+            'appid' => $this->appid,
+            'key' => $this->key,
+        );
+        $unified = array(
+            'appid' => $config['appid'],
+            'mch_id' => $config['mch_id'],
+            'nonce_str' => self::createNonceStr(),
+            'out_trade_no' => $out_trade_no,
+        );
+        $unified['sign'] = self::getSign($unified, $config['key']);
+        $responseXml = self::curlPost('https://api.mch.weixin.qq.com/pay/orderquery', self::arrayToXml($unified));
+        $unifiedOrder = simplexml_load_string($responseXml, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        return $unifiedOrder;
     }
     public static function curlGet($url = '', $options = array())
     {

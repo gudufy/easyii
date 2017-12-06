@@ -5,9 +5,15 @@ use Yii;
 use yii\easyii\modules\catalog\models\Item;
 use yii\easyii\modules\shopcart\models\Good;
 use yii\easyii\modules\shopcart\models\Order;
+use yii\easyii\models\UserAddress;
+use yii\easyii\helpers\Utils;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use yii\data\ActiveDataProvider;
+use yii\widgets\LinkPager;
+use app\modules\community\api\Community;
+
 
 /**
  * Shopcart module API
@@ -36,11 +42,52 @@ class Shopcart extends \yii\easyii\components\API
     const ERROR_ORDER_UPDATE = 7;
 
     private $_order;
+    private $_items;
+    private $_adp;
 
     private $_defaultFormOptions = [
         'errorUrl' => '',
         'successUrl' => ''
     ];
+
+    public function api_orders($options = []){
+        if(!$this->_items){
+            $this->_items = [];
+
+            $query = Order::find()->with(['goods'])->desc();
+
+            if(!empty($options['where'])){
+                foreach ($options['where'] as $where) {
+                    $query->andFilterWhere($where);
+                }
+            }
+
+            if(!empty($options['orderBy'])){
+                $query->orderBy($options['orderBy']);
+            } else {
+                $query->sortDate();
+            }
+
+            $this->_adp = new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+            ]);
+
+            foreach($this->_adp->models as $model){
+                $this->_items[] = new OrderObject($model);
+            }
+        }
+        return $this->_items;
+    }
+
+    public function api_pagination()
+    {
+        return $this->_adp ? $this->_adp->pagination : null;
+    }
+
+    public function api_pages($options = []){
+        return $this->_adp ? LinkPager::widget(array_merge($options, ['pagination' => $this->_adp->pagination])) : '';
+    }
 
     public function api_goods()
     {
@@ -50,6 +97,12 @@ class Shopcart extends \yii\easyii\components\API
     public function api_order($id)
     {
         $order = Order::findOne($id);
+        return $order ? new OrderObject($order) : null;
+    }
+
+    public function api_orderByToken($token)
+    {
+        $order = Order::find()->where(['access_token'=>$token])->one();
         return $order ? new OrderObject($order) : null;
     }
 
@@ -171,7 +224,7 @@ class Shopcart extends \yii\easyii\components\API
         }
     }
 
-    public function api_send($data)
+    public function api_send($data,$new_address)
     {
         $model = $this->order->model;
         if(!$this->order->id || $model->status != Order::STATUS_BLANK){
@@ -182,7 +235,23 @@ class Shopcart extends \yii\easyii\components\API
         }
         $model->setAttributes($data);
         $model->status = Order::STATUS_PENDING;
+        $model->user_id = Yii::$app->user->getId();
+        $model->community_id = Community::community()->id;
+        $model->order_sn = $this->getOrderSn();
+
         if($model->save()){
+            if ($new_address == 1){
+                //插入地址表
+                $address = new UserAddress();
+                $address->setAttributes($data);
+                $address->is_default = UserAddress::getTotal() == 0 ? 1 : 0;
+                $address->country_id = 0;
+                $address->user_id = $model->user_id;
+                $address->mobile = Utils::is_mobile($model->phone) ? $model->phone : '';
+                $address->phone = !Utils::is_mobile($model->phone) ? $model->phone : '';
+                $address->save();
+            }
+
             return [
                 'result' => 'success',
                 'order_id' => $this->order->id,
@@ -215,4 +284,12 @@ class Shopcart extends \yii\easyii\components\API
     public function getToken(){
         return Yii::$app->session->get(Order::SESSION_KEY);
     }
+
+    private function getOrderSn() 
+    { 
+        /* 选择一个随机的方案 */ 
+        mt_srand((double) microtime() * 1000000); 
+
+        return date('Ymd') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT); 
+    } 
 }

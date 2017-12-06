@@ -51,6 +51,13 @@ class Catalog extends \yii\easyii\components\API
         return Category::cats();
     }
 
+    public function api_recommends($limit = 10,$currsor = 0){
+        return $this->api_items([
+            'pagination' => ['pageSize' => $limit],
+            'where' => ['and',['recommended'=>1],['!=','item_id',$currsor]]
+        ]);
+    }
+
     public function api_items($options = [])
     {
         if(!$this->_items){
@@ -59,7 +66,7 @@ class Catalog extends \yii\easyii\components\API
             $query = Item::find()->with(['seo', 'category'])->status(Item::STATUS_ON);
 
             if(!empty($options['where'])){
-                $query->andFilterWhere($options['where']);
+                $query->where($options['where']);
             }
             if(!empty($options['orderBy'])){
                 $query->orderBy($options['orderBy']);
@@ -194,5 +201,23 @@ class Catalog extends \yii\easyii\components\API
         }
 
         return new ItemObject($item);
+    }
+
+    public function api_next($item){
+        $next = Item::find()->where(['and','category_id=:category_id','item_id>:item_id','time<=:time'],[':category_id'=>$item->category_id, ':item_id'=> $item->id,':time'=>time()])->status(Item::STATUS_ON)->sortDate()->one();
+        if($next) {
+            return new ItemObject($next);
+        } else {
+            return null;
+        }
+    }
+
+    public function api_prev($item){
+        $prev = Item::find()->where(['and','category_id=:category_id','item_id<:item_id','time<=:time'],[':category_id'=>$item->category_id, ':item_id'=> $item->id,':time'=>time()])->status(Item::STATUS_ON)->sortDate()->one();
+        if($prev) {
+            return new ItemObject($prev);
+        } else {
+            return null;
+        }
     }
 }

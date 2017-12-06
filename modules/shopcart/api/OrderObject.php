@@ -10,6 +10,8 @@ class OrderObject extends \yii\easyii\components\ApiObject
     public $phone;
     public $email;
     public $access_token;
+    public $time;
+    public $order_sn;
 
     private $_goods;
     private $_cost;

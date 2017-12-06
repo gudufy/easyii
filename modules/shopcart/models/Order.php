@@ -29,10 +29,14 @@ class Order extends \yii\easyii\components\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'address'], 'required', 'on' => 'confirm'],
-            ['email', 'required', 'when' => function($model){ return $model->scenario == 'confirm' && Yii::$app->getModule('admin')->activeModules['shopcart']->settings['enableEmail']; }],
+            [['province_id', 'city_id', 'district_id', 'user_id', 'sex','is_guestbook'], 'integer'],
+            [['name', 'address','phone', 'province_id', 'city_id', 'district_id'], 'required','on'=>'confirm'],
+            //['email', 'required', 'when' => function($model){ return $model->scenario == 'confirm' && Yii::$app->getModule('admin')->activeModules['shopcart']->settings['enableEmail']; }],
             ['phone', 'required', 'when' => function($model){ return $model->scenario == 'confirm' && Yii::$app->getModule('admin')->activeModules['shopcart']->settings['enablePhone']; }],
             [['name', 'address', 'phone', 'comment'], 'trim'],
+            [['province_id', 'city_id', 'district_id', 'user_id', 'sex','address','name'], 'required', 'when' => function($model){
+                return $model->isNewRecord;
+            }],
             ['email', 'email'],
             ['name', 'string', 'max' => 32],
             ['address', 'string', 'max' => 1024],
@@ -46,7 +50,12 @@ class Order extends \yii\easyii\components\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'name' => Yii::t('easyii', 'Name'),
+            'name' => Yii::t('easyii', 'Full Name'),
+            'sex' => Yii::t('easyii', 'Gender'),
+            'province_id' => '省份',
+            'city_id' => '城市',
+            'district_id' => '区/县',
+            'province' => Yii::t('easyii', 'Area'),
             'email' => Yii::t('easyii', 'E-mail'),
             'address' => Yii::t('easyii/shopcart', 'Address'),
             'phone' => Yii::t('easyii/shopcart', 'Phone'),

@@ -76,6 +76,7 @@ return [
     'Setting updated' => '配置修改成功',
     'Setting deleted' => '配置删除成功',
 
+    'Default' => '默认',
     'Basic' => '基本',
     'Advanced' => '高级',
     'Create module' => '添加模块',
@@ -104,6 +105,7 @@ return [
     'Address' => '地址',
     'Phone' => '电话',
     'Fax' => '传真',
+    'Area' => '地区',
 
     'Photos' => '相册',
     'Photo count' => '照片总数',

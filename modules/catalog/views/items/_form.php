@@ -18,7 +18,7 @@ $module = $this->context->module->id;
     <div class="col-md-8">
 
 <?= $form->field($model, 'title') ?>
-
+<?= $form->field($model, 'sub_title') ?>
 <?php if($settings['itemThumb']) : ?>
     <?php if($model->image) : ?>
         <img src="<?= Image::thumb($model->image, 240) ?>">
@@ -39,6 +39,7 @@ $module = $this->context->module->id;
     </div>
     <div class="col-md-4">
 <?= $form->field($model, 'slug') ?>
+<?= $form->field($model, 'recommended')->checkbox() ?>
 <?php if($settings['itemSale']) : ?>
 <?= $form->field($model, 'available')->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>

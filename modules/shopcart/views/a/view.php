@@ -35,7 +35,7 @@ $("#order-status").change(function(){
         </dd>
     <?php endif; ?>
 
-    <dt><?= Yii::t('easyii', 'Name') ?></dt>
+    <dt><?= Yii::t('easyii', 'Full Name') ?></dt>
     <dd><?= $order->name ?></dd>
 
     <dt><?= Yii::t('easyii/shopcart', 'Address') ?></dt>
@@ -52,10 +52,16 @@ $("#order-status").change(function(){
     <?php endif; ?>
 
     <dt><?= Yii::t('easyii', 'Date') ?></dt>
-    <dd><?= Yii::$app->formatter->asDatetime($order->time, 'medium') ?></dd>
+    <dd><?= Yii::$app->formatter->asDatetime($order->time) ?></dd>
 
     <dt>IP</dt>
     <dd><?= $order->ip ?> <a href="//freegeoip.net/?q=<?= $order->ip ?>" class="label label-info" target="_blank">info</a></dd>
+
+    <dt><?= Yii::t('easyii/shopcart', 'Pay Status') ?></dt>
+    <dd><?= $order->pay === 1 ? '已付款' : '未付款' ?></dd>
+
+    <dt><?= Yii::t('easyii/shopcart', 'Pay Time') ?></dt>
+    <dd><?= Yii::$app->formatter->asDatetime($order->pay_time) ?></dd>
 
     <dt><?= Yii::t('easyii/shopcart', 'Comment') ?></dt>
     <dd><?= nl2br($order->comment) ?></dd>

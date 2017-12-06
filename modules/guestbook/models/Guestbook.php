@@ -16,6 +16,7 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
     const FLASH_KEY = 'eaysiicms_guestbook_send_result';
 
     public $reCaptcha;
+    public $image;
 
     public static function tableName()
     {
@@ -28,7 +29,9 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
             [['name', 'text'], 'required'],
             [['name', 'title', 'text'], 'trim'],
             [['name', 'title', 'text'], EscapeValidator::className()],
+            [['goods_id', 'user_id', 'star_rating'], 'integer'],
             ['email', 'email'],
+            ['text', 'string', 'min' => 5],
             ['title', 'string', 'max' => 128],
             ['reCaptcha', ReCaptchaValidator::className(), 'on' => 'send', 'when' => function(){
                 return Yii::$app->getModule('admin')->activeModules['guestbook']->settings['enableCaptcha'];
@@ -44,6 +47,10 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
                 $this->time = time();
                 $this->new = 1;
                 $this->status = Yii::$app->getModule('admin')->activeModules['guestbook']->settings['preModerate'] ? self::STATUS_OFF : self::STATUS_ON;
+                if(Yii::$app->user->identity){
+                    $user = Yii::$app->user->identity;
+                    $this->name = $user->name;
+                }
             }
             return true;
         } else {
@@ -67,7 +74,7 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
             'title' => Yii::t('easyii', 'Title'),
             'email' => 'E-mail',
             'text' => Yii::t('easyii', 'Text'),
-            'answer' => Yii::t('easyii/guestbook', 'Answer'),
+            'answer' => Yii::t('easyii', 'Answer'),
             'reCaptcha' => Yii::t('easyii', 'Anti-spam check')
         ];
     }

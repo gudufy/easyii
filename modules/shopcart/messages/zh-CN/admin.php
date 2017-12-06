@@ -26,5 +26,8 @@ return [
     'View' => '查看',
     'Order status changed' => '订单状态已更新',
     'Notify user on E-mail' => '发送E-mail通知给用户',
-    'Name' => '收货人'
+    'Name' => '收货人',
+    'Pay Status' => '支付状态',
+    'Pay Time' => '支付时间',
+    'Delivery Status' => '发货状态',
 ];

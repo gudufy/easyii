@@ -20,6 +20,8 @@ $module = $this->context->module->id;
                 <th><?= Yii::t('easyii/shopcart', 'Address') ?></th>
                 <th width="100"><?= Yii::t('easyii/shopcart', 'Cost') ?></th>
                 <th width="150"><?= Yii::t('easyii', 'Date') ?></th>
+                <th width="90"><?= Yii::t('easyii/shopcart', 'Pay Status') ?></th>
+                <th width="90"><?= Yii::t('easyii/shopcart', 'Delivery Status') ?></th>
                 <th width="90"><?= Yii::t('easyii', 'Status') ?></th>
                 <th width="90"></th>
             </tr>
@@ -37,6 +39,8 @@ $module = $this->context->module->id;
                 <td><?= $item->address ?></td>
                 <td><?= $item->cost ?></td>
                 <td><?= Yii::$app->formatter->asDatetime($item->time, 'short') ?></td>
+                <td><?= $item->pay === 1 ? '已付款' : '-' ?></td>
+                <td><?= $item->delivery === 1 ? '已发货' : '-' ?></td>
                 <td><?= Order::statusName($item->status) ?></td>
                 <td class="control">
                     <div class="btn-group btn-group-sm" role="group">

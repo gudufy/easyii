@@ -20,13 +20,13 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         return [
             ['title', 'required'],
-            ['title', 'trim'],
-            ['title', 'string', 'max' => 128],
+            [['title','sub_title'], 'trim'],
+            [['title','sub_title'], 'string', 'max' => 128],
             ['image', 'image'],
             ['description', 'safe'],
             ['price', 'number'],
             ['discount', 'integer', 'max' => 99],
-            [['status', 'category_id', 'available', 'time'], 'integer'],
+            [['status', 'category_id', 'available', 'time','recommended'], 'integer'],
             ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
@@ -38,9 +38,11 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         return [
             'title' => Yii::t('easyii', 'Title'),
+            'sub_title' => Yii::t('easyii/catalog', 'Sub Title'),
             'image' => Yii::t('easyii', 'Image'),
             'description' => Yii::t('easyii', 'Description'),
             'available' => Yii::t('easyii/catalog', 'Available'),
+            'recommended' => Yii::t('easyii/catalog', 'Recommended'),
             'price' => Yii::t('easyii/catalog', 'Price'),
             'discount' => Yii::t('easyii/catalog', 'Discount'),
             'time' => Yii::t('easyii', 'Date'),

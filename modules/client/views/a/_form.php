@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
 <?php if($model->image) : ?>
-    <img src="<?= $model->image ?>" style="width: 848px">
+    <img src="<?= $model->image ?>">
 <?php endif; ?>
 <?= $form->field($model, 'image')->fileInput() ?>
 <?= $form->field($model, 'link') ?>

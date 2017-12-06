@@ -97,7 +97,7 @@ class Guestbook extends \yii\easyii\components\API
         if($settings['enableTitle']) echo $form->field($model, 'title');
         if($settings['enableEmail']) echo $form->field($model, 'email');
 
-        echo $form->field($model, 'text')->textarea();
+        echo $form->field($model, 'text')->textarea(['rows'=>8]);
 
         if($settings['enableCaptcha']) echo $form->field($model, 'reCaptcha')->widget(ReCaptcha::className());
 

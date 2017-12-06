@@ -27,7 +27,7 @@ class AController extends Controller
     {
         return $this->render('index', [
             'data' => new ActiveDataProvider([
-                'query' => Order::find()->with('goods')->status(Order::STATUS_PENDING)->asc(),
+                'query' => Order::find()->with('goods')->where(['>','user_id',0])->desc(),
                 'totalCount' => $this->pending
             ])
         ]);
@@ -102,6 +102,10 @@ class AController extends Controller
 
             $order->status = $newStatus;
             $order->remark = filter_var($request->post('remark'), FILTER_SANITIZE_STRING);
+            if($order->status === 4 && $order->delivery === 0){
+                $order->delivery = 1;
+                $order->delivery_time = time();
+            }
 
             if($order->save()){
                 if($newStatus != $oldStatus && $request->post('notify')){

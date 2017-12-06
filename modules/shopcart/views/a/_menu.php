@@ -43,6 +43,14 @@ if($action === 'view')
             <?php if($backTo === 'index') : ?>
                 <i class="glyphicon glyphicon-chevron-left font-12"></i>
             <?php endif; ?>
+            <?= Yii::t('easyii/shopcart', 'All') ?>
+        </a>
+    </li>
+    <li <?= ($action === 'pending') ? 'class="active"' : '' ?>>
+        <a href="<?= $indexUrl ?>">
+            <?php if($backTo === 'pending') : ?>
+                <i class="glyphicon glyphicon-chevron-left font-12"></i>
+            <?php endif; ?>
             <?= Yii::t('easyii/shopcart', 'Pending') ?>
             <?php if($this->context->pending > 0) : ?>
                 <span class="badge"><?= $this->context->pending ?></span>

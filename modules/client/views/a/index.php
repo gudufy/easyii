@@ -28,7 +28,7 @@ $module = $this->context->module->id;
                 <?php if(IS_ROOT) : ?>
                     <td><?= $item->primaryKey ?></td>
                 <?php endif; ?>
-                <td><a href="<?= Url::to(['/admin/'.$module.'/a/edit', 'id' => $item->primaryKey]) ?>"><img src="<?= $item->image ?>" style="width: 550px;"></a></td>
+                <td><a href="<?= Url::to(['/admin/'.$module.'/a/edit', 'id' => $item->primaryKey]) ?>"><img src="<?= $item->image ?>"></a></td>
                 <td class="status vtop">
                     <?= Html::checkbox('', $item->status == Client::STATUS_ON, [
                         'class' => 'switch',

@@ -14,10 +14,12 @@ return [
     'Item deleted' => '删除成功',
 
     'Title' => '标题',
+    'Sub Title' => '子标题',
     'Type' => '类型',
     'Options' => '选项',
     'Available' => '可用',
     'Price' => '价格',
     'Discount' => '优惠',
     'Select' => '下拉',
+    'Recommended' => '推荐',
 ];
