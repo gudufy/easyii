@@ -27,7 +27,7 @@ class ItemObject extends \yii\easyii\components\ApiObject
     }
 
     public function getDescription(){
-        return LIVE_EDIT ? API::liveEdit($this->model->description, $this->editLink, 'div') : $this->model->description;
+        return LIVE_EDIT ? API::liveEdit($this->model->description, $this->editLink, 'div') : str_replace('src','data-original',$this->model->description);
     }
 
     public function getCat(){
@@ -35,11 +35,12 @@ class ItemObject extends \yii\easyii\components\ApiObject
     }
 
     public function getPrice(){
-        return $this->discount ? round($this->model->price * (1 - $this->discount / 100) ) : $this->model->price;
+        //return $this->discount ? round($this->model->price * (1 - $this->discount / 100) ) : $this->model->price;
+        return $this->discount ? $this->discount : $this->model->price;
     }
 
     public function getOldPrice(){
-        return $this->model->oldPrice;
+        return $this->model->price;
     }
 
     public function getDate(){

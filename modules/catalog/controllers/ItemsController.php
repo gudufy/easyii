@@ -119,7 +119,8 @@ class ItemsController extends Controller
         else {
             return $this->render('edit', [
                 'model' => $model,
-                'dataForm' => $this->generateForm($model->category->fields, $model->data)
+                'dataForm' => $this->generateForm($model->category->fields, $model->data),
+                'pricesForm' => $this->generatePricesForm($model->category->fields, $model->data)
             ]);
         }
     }
@@ -182,6 +183,52 @@ class ItemsController extends Controller
     public function actionOff($id)
     {
         return $this->changeStatus($id, Item::STATUS_OFF);
+    }
+
+    private function generatePricesForm($fields, $data = null){
+        $result = '';
+        foreach($fields as $field){
+            if ($field->type === 'prices') {
+                $result .= '<p><strong>'. $field->title .'</strong></p>';
+                if (!isset($data->{$field->name})) {
+                    $result .= '<div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">'. Html::input('text', "Data[{$field->name}_title][]", '', ['class' => 'form-control','placeholder'=>$field->title]) .'</div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">'. Html::input('text', "Data[{$field->name}_price][]", '', ['class' => 'form-control','placeholder'=>'价格']) .'</div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">'. Html::input('text', "Data[{$field->name}_discount][]", '', ['class' => 'form-control','placeholder'=>'优惠价']) .'</div>
+                        </div>
+                        <div class="col-lg-2">
+                            <input type="button" class="btn btn-default add-row" value="增加" />
+                        </div>
+                    </div>';
+
+                    return $result;
+                }
+
+                for ($i=0; $i < count($data->{$field->name.'_title'}); $i++) { 
+                    $result .= '<div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">'. Html::input('text', "Data[{$field->name}_title][]", isset($data->{$field->name.'_title'}) ? $data->{$field->name.'_title'}[$i] : '', ['class' => 'form-control','placeholder'=>$field->title]) .'</div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">'. Html::input('text', "Data[{$field->name}_price][]", isset($data->{$field->name.'_price'}) ? $data->{$field->name.'_price'}[$i] : '', ['class' => 'form-control','placeholder'=>'价格']) .'</div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">'. Html::input('text', "Data[{$field->name}_discount][]", isset($data->{$field->name.'_discount'}) ? $data->{$field->name.'_discount'}[$i] : '', ['class' => 'form-control','placeholder'=>'优惠价']) .'</div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <input type="button" class="btn btn-default add-row" value="增加" />
+                                    </div>
+                                </div>';
+                }
+            }
+        }
+        
+        return $result = '';
     }
 
     private function generateForm($fields, $data = null)

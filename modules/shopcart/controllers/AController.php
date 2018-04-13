@@ -10,17 +10,25 @@ use yii\easyii\modules\shopcart\models\Order;
 
 class AController extends Controller
 {
+    public $all = 0;
     public $pending = 0;
     public $processed = 0;
     public $sent = 0;
+    public $completed = 0;
+    public $fails = 0;
+    public $refund = 0;
 
     public function init()
     {
         parent::init();
 
+        $this->all = Order::find()->where(['>','user_id',0])->count();
         $this->pending = Order::find()->status(Order::STATUS_PENDING)->count();
         $this->processed = Order::find()->status(Order::STATUS_PROCESSED)->count();
         $this->sent = Order::find()->status(Order::STATUS_SENT)->count();
+        $this->completed = Order::find()->status(Order::STATUS_COMPLETED)->count();
+        $this->fails = Order::find()->where(['in', 'status', [Order::STATUS_DECLINED, Order::STATUS_ERROR, Order::STATUS_RETURNED]])->count();
+        $this->refund = Order::find()->where(['pay'=>1,'is_refund'=>0,'status'=>Order::STATUS_DECLINED])->count();
     }
 
     public function actionIndex()
@@ -28,7 +36,16 @@ class AController extends Controller
         return $this->render('index', [
             'data' => new ActiveDataProvider([
                 'query' => Order::find()->with('goods')->where(['>','user_id',0])->desc(),
-                'totalCount' => $this->pending
+            ])
+        ]);
+    }
+
+    public function actionPending()
+    {
+        $this->setReturnUrl();
+        return $this->render('index', [
+            'data' => new ActiveDataProvider([
+                'query' => Order::find()->with('goods')->status(Order::STATUS_PENDING)->asc(),
             ])
         ]);
     }
@@ -39,7 +56,6 @@ class AController extends Controller
         return $this->render('index', [
             'data' => new ActiveDataProvider([
                 'query' => Order::find()->with('goods')->status(Order::STATUS_PROCESSED)->asc(),
-                'totalCount' => $this->processed
             ])
         ]);
     }
@@ -50,7 +66,6 @@ class AController extends Controller
         return $this->render('index', [
             'data' => new ActiveDataProvider([
                 'query' => Order::find()->with('goods')->status(Order::STATUS_SENT)->asc(),
-                'totalCount' => $this->sent
             ])
         ]);
     }
@@ -71,6 +86,15 @@ class AController extends Controller
         return $this->render('index', [
             'data' => new ActiveDataProvider([
                 'query' => Order::find()->with('goods')->where(['in', 'status', [Order::STATUS_DECLINED, Order::STATUS_ERROR, Order::STATUS_RETURNED]])->desc()
+            ])
+        ]);
+    }
+
+    public function actionRefund()
+    {
+        return $this->render('index', [
+            'data' => new ActiveDataProvider([
+                'query' => Order::find()->with('goods')->where(['pay'=>1,'is_refund'=>0,'status'=>Order::STATUS_DECLINED])->desc(),
             ])
         ]);
     }
@@ -141,5 +165,63 @@ class AController extends Controller
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii/shopcart', 'Order deleted'));
+    }
+
+    public function actionExport($type='')
+    {
+        $allModels = Order::find()->with('goods')->where(['>','user_id',0])->desc()->all();
+
+        \moonland\phpexcel\Excel::export([
+            'models' => $allModels, 
+            'columns' => ['name',[
+                    'attribute' => 'address',
+                    'format' => 'text',
+                    'value' => function($model) {
+                        return $model->getFullRegion().$model->address;
+                    },
+                ],'phone:text','cost',[
+                    'attribute' => 'time',
+                    'format' => 'date',
+                ],[
+                    'attribute' => 'pay',
+                    'format' => 'text',
+                    'value' => function($model) {
+                        return $model->pay === 1 ? '已付款' : '';
+                    },
+                ],[
+                    'attribute' => 'status',
+                    'format' => 'text',
+                    'value' => function($model) {
+                        if($model->status === 3 && $model->is_refund===1){
+                            return '已退款';
+                        }
+                        else{
+                            return Order::statusName($model->status);
+                        }
+                    },
+                ],[
+                    'attribute' => 'goods',
+                    'format' => 'text',
+                    'value' => function($model) {
+                        $goodsText = '';
+                        foreach($model->goods as $good){
+                            $goodsText = $goodsText. ''.$good->item->title.'×'.$good->count.'；';   
+                        }
+
+                        return $goodsText;
+                    },
+                ]
+            ], 
+            'headers' => [
+                'name' => Yii::t('easyii', 'Name'),
+                'phone' => Yii::t('easyii', 'Phone'),
+                'address' => Yii::t('easyii/shopcart', 'Address'), 
+                'cost' => Yii::t('easyii/shopcart', 'Cost'),
+                'time' => Yii::t('easyii', 'Date'),
+                'pay' => Yii::t('easyii/shopcart', 'Pay Status'),
+                'status' => Yii::t('easyii', 'Status'),
+                'goods' => '订单内容'
+            ],
+        ]);
     }
 }

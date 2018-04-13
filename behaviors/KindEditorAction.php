@@ -15,5 +15,6 @@ class KindEditorAction extends \pjkui\kindeditor\KindEditorAction {
         $this->save_path = $this->php_path . 'uploads/';
         //文件保存目录URL
         $this->save_url = $this->php_url . 'uploads/';
+        $this->max_size = 2000000;
     }
 }

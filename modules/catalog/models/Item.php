@@ -25,7 +25,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['image', 'image'],
             ['description', 'safe'],
             ['price', 'number'],
-            ['discount', 'integer', 'max' => 99],
+            ['discount', 'integer'],
             [['status', 'category_id', 'available', 'time','recommended'], 'integer'],
             ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
@@ -72,7 +72,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             $this->data = json_encode($this->data);
 
             if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
+                //@unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
             }
 
             return true;

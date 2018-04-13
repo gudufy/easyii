@@ -39,7 +39,7 @@ $("#order-status").change(function(){
     <dd><?= $order->name ?></dd>
 
     <dt><?= Yii::t('easyii/shopcart', 'Address') ?></dt>
-    <dd><?= $order->address ?></dd>
+    <dd><?= $order->getFullRegion() ?><?= $order->address ?></dd>
 
     <?php if($this->context->module->settings['enablePhone']) : ?>
         <dt><?= Yii::t('easyii/shopcart', 'Phone') ?></dt>
@@ -58,7 +58,8 @@ $("#order-status").change(function(){
     <dd><?= $order->ip ?> <a href="//freegeoip.net/?q=<?= $order->ip ?>" class="label label-info" target="_blank">info</a></dd>
 
     <dt><?= Yii::t('easyii/shopcart', 'Pay Status') ?></dt>
-    <dd><?= $order->pay === 1 ? '已付款' : '未付款' ?></dd>
+    <dd><?= $order->pay === 1 ? '已付款' : '未付款' ?> 
+    </dd>
 
     <dt><?= Yii::t('easyii/shopcart', 'Pay Time') ?></dt>
     <dd><?= Yii::$app->formatter->asDatetime($order->pay_time) ?></dd>
@@ -102,7 +103,6 @@ $("#order-status").change(function(){
                 <td><?= $good->discount ?></td>
                 <td>
                     <?php if($good->discount) : ?>
-                        <b><?= round($good->price * (1 - $good->discount / 100)) ?></b>
                         <strike><small class="smooth"><?= $good->price ?></small></strike>
                     <?php else : ?>
                         <b><?= $good->price ?></b>

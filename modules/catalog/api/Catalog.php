@@ -54,7 +54,7 @@ class Catalog extends \yii\easyii\components\API
     public function api_recommends($limit = 10,$currsor = 0){
         return $this->api_items([
             'pagination' => ['pageSize' => $limit],
-            'where' => ['and',['recommended'=>1],['!=','item_id',$currsor]]
+            'where' => ['and',['recommended'=>1],['!=','item_id',$currsor],['status'=>1]]
         ]);
     }
 
@@ -66,7 +66,7 @@ class Catalog extends \yii\easyii\components\API
             $query = Item::find()->with(['seo', 'category'])->status(Item::STATUS_ON);
 
             if(!empty($options['where'])){
-                $query->where($options['where']);
+                $query->andWhere($options['where']);
             }
             if(!empty($options['orderBy'])){
                 $query->orderBy($options['orderBy']);

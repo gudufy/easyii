@@ -1,15 +1,26 @@
 <?php
 use yii\easyii\helpers\Image;
 use yii\easyii\widgets\DateTimePicker;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\easyii\widgets\Redactor;
 use yii\easyii\widgets\SeoForm;
 
+use yii\easyii\modules\catalog\models\Category;
+
 $settings = $this->context->module->settings;
 $module = $this->context->module->id;
+
+$cats = ArrayHelper::map(Category::find()->all(),'category_id','title');
 ?>
+
+<?php \app\widgets\JsBlock::begin() ?>
+<script type="text/javascript">
+    
+</script>
+<?php \app\widgets\JsBlock::end()?>
 
 <?php $form = ActiveForm::begin([
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
@@ -19,6 +30,9 @@ $module = $this->context->module->id;
 
 <?= $form->field($model, 'title') ?>
 <?= $form->field($model, 'sub_title') ?>
+<?= $form->field($model, 'category_id')->dropDownList(
+                                $cats, 
+                                ['prompt'=>Yii::t('easyii','Please select...')]) ?>
 <?php if($settings['itemThumb']) : ?>
     <?php if($model->image) : ?>
         <img src="<?= Image::thumb($model->image, 240) ?>">
@@ -26,6 +40,9 @@ $module = $this->context->module->id;
     <?php endif; ?>
     <?= $form->field($model, 'image')->fileInput() ?>
 <?php endif; ?>
+<div class="prices-box">
+<?= $pricesForm ?>
+</div>
 <?= $dataForm ?>
     <?= $form->field($model, 'description')->widget(Redactor::className(),[
         'options' => [
@@ -41,10 +58,13 @@ $module = $this->context->module->id;
 <?= $form->field($model, 'slug') ?>
 <?= $form->field($model, 'recommended')->checkbox() ?>
 <?php if($settings['itemSale']) : ?>
+<div id='old-prices'>
 <?= $form->field($model, 'available')->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'discount')->textInput(['maxlength' => true]) ?>
+        </div>
 <?php endif; ?>
+
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 
 <?= SeoForm::widget(['model' => $model]) ?>

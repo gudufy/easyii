@@ -141,4 +141,5 @@ return [
 
     'Content Manage' => '内容管理',
     'Admins' => '管理员',
+    'Export' => '导出'
 ];

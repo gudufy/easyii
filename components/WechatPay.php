@@ -1,6 +1,7 @@
 <?php
 namespace yii\easyii\components;
 use Yii;
+use yii\easyii\helpers\Utils;
 
 class WechatPay
 {
@@ -29,7 +30,7 @@ class WechatPay
             'notify_url' => $notifyUrl,
             'openid' => $openid,
             'out_trade_no' => $outTradeNo,
-            'spbill_create_ip' => '127.0.0.1',
+            'spbill_create_ip' => Utils::get_client_ip(),
             'total_fee' => intval($totalFee * 100),
             'trade_type' => $trade_type,
         );
@@ -46,7 +47,7 @@ class WechatPay
             die($unifiedOrder->return_msg);
         }
         if ($unifiedOrder->result_code != 'SUCCESS') {
-            die($unifiedOrder->err_code);
+            die($unifiedOrder->err_code_des);
         }
 
         if($trade_type == 'JSAPI'){
@@ -80,6 +81,7 @@ class WechatPay
         );
         return $signPackage;
     }
+    //支付结果查询
     public function orderQuery($out_trade_no){
         $config = array(
             'mch_id' => $this->mchid,
@@ -94,6 +96,45 @@ class WechatPay
         );
         $unified['sign'] = self::getSign($unified, $config['key']);
         $responseXml = self::curlPost('https://api.mch.weixin.qq.com/pay/orderquery', self::arrayToXml($unified));
+        $unifiedOrder = simplexml_load_string($responseXml, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        return $unifiedOrder;
+    }
+    public function orderRefund($out_trade_no,$out_refund_no,$total_fee,$refund_fee){
+        $config = array(
+            'mch_id' => $this->mchid,
+            'appid' => $this->appid,
+            'key' => $this->key,
+        );
+        $unified = array(
+            'appid' => $config['appid'],
+            'mch_id' => $config['mch_id'],
+            'nonce_str' => self::createNonceStr(),
+            'out_trade_no' => $out_trade_no,
+            'out_refund_no' => $out_refund_no,
+            'total_fee' => intval($total_fee * 100),
+            'refund_fee' => intval($refund_fee * 100),
+        );
+        $unified['sign'] = self::getSign($unified, $config['key']);
+        $responseXml = self::curlPost('https://api.mch.weixin.qq.com/secapi/pay/refund', self::arrayToXml($unified));
+        $unifiedOrder = simplexml_load_string($responseXml, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        return $unifiedOrder;
+    }
+    public function orderClose($out_trade_no){
+        $config = array(
+            'mch_id' => $this->mchid,
+            'appid' => $this->appid,
+            'key' => $this->key,
+        );
+        $unified = array(
+            'appid' => $config['appid'],
+            'mch_id' => $config['mch_id'],
+            'nonce_str' => self::createNonceStr(),
+            'out_trade_no' => $out_trade_no,
+        );
+        $unified['sign'] = self::getSign($unified, $config['key']);
+        $responseXml = self::curlPost('https://api.mch.weixin.qq.com/pay/closeorder', self::arrayToXml($unified));
         $unifiedOrder = simplexml_load_string($responseXml, 'SimpleXMLElement', LIBXML_NOCDATA);
 
         return $unifiedOrder;
@@ -130,6 +171,11 @@ class WechatPay
         //https请求 不验证证书和host
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
+        curl_setopt($ch,CURLOPT_SSLCERT,getcwd().'/cert/apiclient_cert.pem');
+        //默认格式为PEM，可以注释
+        curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
+        curl_setopt($ch,CURLOPT_SSLKEY,getcwd().'/cert/apiclient_key.pem');
         $data = curl_exec($ch);
         curl_close($ch);
         return $data;

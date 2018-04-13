@@ -30,4 +30,5 @@ return [
     'Pay Status' => '支付状态',
     'Pay Time' => '支付时间',
     'Delivery Status' => '发货状态',
+    'Refund' => '待退款',
 ];

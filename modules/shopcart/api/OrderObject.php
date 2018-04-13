@@ -34,7 +34,7 @@ class OrderObject extends \yii\easyii\components\ApiObject
         if($this->_cost === null) {
             $this->_cost = 0;
             foreach ($this->goods as $good) {
-                $this->_cost += $good->price * $good->count;
+                $this->_cost += ($good->discount ? $good->discount : $good->price) * $good->count;
             }
         }
         return $this->_cost;

@@ -23,6 +23,28 @@ $(function(){
         return false;
     });
 
+    body.on('click', '.confirm-refund', function(){
+        var button = $(this).addClass('disabled');
+        var title = button.attr('title');
+
+        if(confirm(title ? title+'?' : 'Confirm the deletion')){
+            if(button.data('reload')){
+                return true;
+            }
+            $.getJSON(button.attr('href'), function(response){
+                button.removeClass('disabled');
+                if(response.error === 0){
+                    notify.success(response.msg);
+                    location.reload();
+                } else {
+                    alert(response.package.err_code_des);
+                }
+            });
+        }
+        button.removeClass('disabled');
+        return false;
+    });
+
     body.on('click', '.move-up, .move-down', function(){
         var button = $(this).addClass('disabled');
 

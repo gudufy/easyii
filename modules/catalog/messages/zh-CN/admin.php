@@ -19,7 +19,7 @@ return [
     'Options' => '选项',
     'Available' => '可用',
     'Price' => '价格',
-    'Discount' => '优惠',
+    'Discount' => '优惠价',
     'Select' => '下拉',
     'Recommended' => '推荐',
 ];

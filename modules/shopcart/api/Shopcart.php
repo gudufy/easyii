@@ -106,6 +106,14 @@ class Shopcart extends \yii\easyii\components\API
         return $order ? new OrderObject($order) : null;
     }
 
+    public function api_refreshOutTradeNoByToken($out_trade_no,$id)
+    {
+        Yii::$app->db->createCommand('UPDATE easyii_shopcart_orders SET out_trade_no=:out_trade_no WHERE order_id=:order_id')
+        ->bindValue(':out_trade_no', $out_trade_no)
+        ->bindValue(':order_id', $id)
+        ->execute();
+    }
+
     public function api_form($options = [])
     {
         $model = new Order;
@@ -144,7 +152,7 @@ class Shopcart extends \yii\easyii\components\API
 
         if(!$this->order->id){
             if(!$this->order->model->save()){
-                return ['result' => 'error', 'code' => self::ERROR_CREATE_ORDER, 'error' => 'Cannot create order. '.$this->order->formatErrors()];
+                return ['result' => 'error', 'code' => self::ERROR_CREATE_ORDER, 'error' => 'Cannot create order. '.$this->order->model->formatErrors()];
             }
             Yii::$app->session->set(Order::SESSION_KEY, $this->order->model->access_token);
         }
@@ -182,7 +190,7 @@ class Shopcart extends \yii\easyii\components\API
                 'discount' => $good->discount,
             ];
             if($response['discount']){
-                $response['price'] = round($good->price * (1 - $good->discount / 100));
+                $response['price'] = $good->discount;
                 $response['old_price'] = $good->price;
             } else {
                 $response['price'] = $good->price;

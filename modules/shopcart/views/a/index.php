@@ -16,14 +16,14 @@ $module = $this->context->module->id;
         <thead>
             <tr>
                 <th width="100">#</th>
-                <th><?= Yii::t('easyii', 'Name') ?></th>
+                <th width="100"><?= Yii::t('easyii', 'Name') ?></th>
+                <th width="150"><?= Yii::t('easyii', 'Phone') ?></th>
                 <th><?= Yii::t('easyii/shopcart', 'Address') ?></th>
                 <th width="100"><?= Yii::t('easyii/shopcart', 'Cost') ?></th>
                 <th width="150"><?= Yii::t('easyii', 'Date') ?></th>
                 <th width="90"><?= Yii::t('easyii/shopcart', 'Pay Status') ?></th>
-                <th width="90"><?= Yii::t('easyii/shopcart', 'Delivery Status') ?></th>
                 <th width="90"><?= Yii::t('easyii', 'Status') ?></th>
-                <th width="90"></th>
+                <th width="120"></th>
             </tr>
         </thead>
         <tbody>
@@ -36,16 +36,25 @@ $module = $this->context->module->id;
                     <?php endif; ?>
                 </td>
                 <td><?= $item->name ?></td>
-                <td><?= $item->address ?></td>
+                <td><?= $item->phone ?></td>
+                <td><?= $item->getFullRegion() ?><?= $item->address ?></td>
                 <td><?= $item->cost ?></td>
                 <td><?= Yii::$app->formatter->asDatetime($item->time, 'short') ?></td>
                 <td><?= $item->pay === 1 ? '已付款' : '-' ?></td>
-                <td><?= $item->delivery === 1 ? '已发货' : '-' ?></td>
-                <td><?= Order::statusName($item->status) ?></td>
+                <td>
+                <?php if($item->status === 3 && $item->is_refund===1) : ?>
+                已退款
+                <?php else : ?>
+                <?= Order::statusName($item->status) ?>
+                <?php endif; ?>
+                </td>
                 <td class="control">
                     <div class="btn-group btn-group-sm" role="group">
                         <a href="<?= Url::to(['/admin/'.$module.'/a/view', 'id' => $item->primaryKey]) ?>" class="btn btn-default" title="<?= Yii::t('easyii/shopcart', 'View') ?>"><span class="glyphicon glyphicon-eye-open"></span></a>
                         <a href="<?= Url::to(['/admin/'.$module.'/a/delete', 'id' => $item->primaryKey]) ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"><span class="glyphicon glyphicon-remove"></span></a>
+                        <?php if($item->status === 3 && $item->pay===1 && $item->is_refund===0) : ?>
+                        <a href="<?= Url::to(['/wechat/order-refund', 'out_trade_no' => $item->order_sn]) ?>" class="btn btn-default confirm-refund" title="同意退款"><span class="glyphicon">退</span></a>
+                        <?php endif; ?>
                     </div>
                 </td>
             </tr>

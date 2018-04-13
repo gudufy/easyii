@@ -8,7 +8,8 @@ class Category extends \yii\easyii\components\CategoryModel
         'text' => 'Text',
         'boolean' => 'Boolean',
         'select' => 'Select',
-        'checkbox' => 'Checkbox'
+        'checkbox' => 'Checkbox',
+        'prices' => 'Prices',
     ];
 
     public static function tableName()

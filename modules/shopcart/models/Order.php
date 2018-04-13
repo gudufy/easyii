@@ -6,6 +6,7 @@ use yii\easyii\behaviors\CalculateNotice;
 use yii\easyii\helpers\Mail;
 use yii\easyii\models\Setting;
 use yii\easyii\validators\EscapeValidator;
+use yii\easyii\behaviors\RegionBehavior;
 use yii\helpers\Url;
 
 class Order extends \yii\easyii\components\ActiveRecord
@@ -35,7 +36,7 @@ class Order extends \yii\easyii\components\ActiveRecord
             ['phone', 'required', 'when' => function($model){ return $model->scenario == 'confirm' && Yii::$app->getModule('admin')->activeModules['shopcart']->settings['enablePhone']; }],
             [['name', 'address', 'phone', 'comment'], 'trim'],
             [['province_id', 'city_id', 'district_id', 'user_id', 'sex','address','name'], 'required', 'when' => function($model){
-                return $model->isNewRecord;
+                return !$model->isNewRecord;
             }],
             ['email', 'email'],
             ['name', 'string', 'max' => 32],
@@ -67,6 +68,7 @@ class Order extends \yii\easyii\components\ActiveRecord
     public function behaviors()
     {
         return [
+            RegionBehavior::className(),
             'cn' => [
                 'class' => CalculateNotice::className(),
                 'callback' => function(){
@@ -111,7 +113,7 @@ class Order extends \yii\easyii\components\ActiveRecord
     {
         $total = 0;
         foreach($this->goods as $good){
-            $total += $good->count * round($good->price * (1 - $good->discount / 100));
+            $total += $good->count * ($good->discount ? $good->discount : $good->price);
         }
 
         return $total;
@@ -123,6 +125,7 @@ class Order extends \yii\easyii\components\ActiveRecord
             if($insert) {
                 $this->ip = Yii::$app->request->userIP;
                 $this->access_token = Yii::$app->security->generateRandomString(32);
+                $this->is_guestbook=0;
                 $this->time = time();
             } else {
                 if($this->oldAttributes['status'] == self::STATUS_BLANK && $this->status == self::STATUS_PENDING){

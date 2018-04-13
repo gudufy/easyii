@@ -24,7 +24,7 @@ class GoodObject extends \yii\easyii\components\ApiObject
     }
 
     public function getPrice(){
-        return round($this->model->price * (1 - $this->discount / 100), 2);
+        return $this->discount ? $this->discount : $this->model->price;
     }
 
     public function getOld_price(){
