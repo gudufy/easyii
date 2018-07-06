@@ -25,7 +25,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['image', 'image'],
             ['description', 'safe'],
             ['price', 'number'],
-            ['discount', 'integer'],
+            [['discount','price1','price2'], 'double'],
             [['status', 'category_id', 'available', 'time','recommended'], 'integer'],
             ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
@@ -45,6 +45,8 @@ class Item extends \yii\easyii\components\ActiveRecord
             'recommended' => Yii::t('easyii/catalog', 'Recommended'),
             'price' => Yii::t('easyii/catalog', 'Price'),
             'discount' => Yii::t('easyii/catalog', 'Discount'),
+            'price1' => Yii::t('easyii/catalog', 'Price1'),
+            'price2' => Yii::t('easyii/catalog', 'Price2'),
             'time' => Yii::t('easyii', 'Date'),
             'slug' => Yii::t('easyii', 'Slug'),
         ];
@@ -121,6 +123,25 @@ class Item extends \yii\easyii\components\ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
+    }
+
+    public function getPrice(){
+        if(Yii::$app->getUser()->isGuest){
+            return $this->discount;
+        }
+        else{
+            $user = Yii::$app->user->getIdentity();
+            switch ($user->level) {
+                case 1:
+                    return $this->price1;
+                case 2:
+                    return $this->price2;
+                default:
+                    return $this->discount;
+            }
+        }
+
+        //return $this->discount ? $this->discount : $this->model->price;
     }
 
     public function afterDelete()

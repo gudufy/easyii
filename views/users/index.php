@@ -28,7 +28,7 @@ $this->title = Yii::t('easyii', 'Users');
         <?php foreach($data->models as $user) : ?>
             <tr>
                 <td><?= $user->user_id ?></td>
-                <td><a href="<?= Url::to(['/admin/users/'.(Helper::checkRoute('/admin/users/*') ? 'edit' : 'view'), 'id' => $user->user_id]) ?>"><?= $user->mobile ?></a></td>
+                <td><a href="<?= Url::to(['/admin/users/'.(Helper::checkRoute('/admin/users/*') ? 'edit' : 'view'), 'id' => $user->user_id]) ?>"><?= $user->mobile ?></a> <?= $user->getLevelText() ?></td>
                 <td><?= $user->company ?></td>
                 <td><?= $user->name ?> <?= $user->getSexText() ?></td>
                 <td><?= $user->email ?></td>

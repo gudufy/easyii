@@ -116,7 +116,7 @@ class WechatPay
             'refund_fee' => intval($refund_fee * 100),
         );
         $unified['sign'] = self::getSign($unified, $config['key']);
-        $responseXml = self::curlPost('https://api.mch.weixin.qq.com/secapi/pay/refund', self::arrayToXml($unified));
+        $responseXml = self::curlPost('https://api.mch.weixin.qq.com/secapi/pay/refund', self::arrayToXml($unified), array(), 2);
         $unifiedOrder = simplexml_load_string($responseXml, 'SimpleXMLElement', LIBXML_NOCDATA);
 
         return $unifiedOrder;
@@ -148,13 +148,13 @@ class WechatPay
             curl_setopt_array($ch, $options);
         }
         //https请求 不验证证书和host
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $verifypeer);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $verifypeer);
         $data = curl_exec($ch);
         curl_close($ch);
         return $data;
     }
-    public static function curlPost($url = '', $postData = '', $options = array())
+    public static function curlPost($url = '', $postData = '', $options = array(), $verifypeer = false)
     {
         if (is_array($postData)) {
             $postData = http_build_query($postData);
@@ -169,8 +169,8 @@ class WechatPay
             curl_setopt_array($ch, $options);
         }
         //https请求 不验证证书和host
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $verifypeer);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $verifypeer);
         curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
         curl_setopt($ch,CURLOPT_SSLCERT,getcwd().'/cert/apiclient_cert.pem');
         //默认格式为PEM，可以注释

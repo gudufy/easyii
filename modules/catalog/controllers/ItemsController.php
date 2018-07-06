@@ -120,7 +120,7 @@ class ItemsController extends Controller
             return $this->render('edit', [
                 'model' => $model,
                 'dataForm' => $this->generateForm($model->category->fields, $model->data),
-                'pricesForm' => $this->generatePricesForm($model->category->fields, $model->data)
+                //'pricesForm' => $this->generatePricesForm($model->category->fields, $model->data)
             ]);
         }
     }

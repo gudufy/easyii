@@ -175,8 +175,8 @@ class Shopcart extends \yii\easyii\components\API
                 'item_id' => $item->primaryKey,
                 'count' => (int)$count,
                 'options' => $options,
-                'discount' => $item->discount,
-                'price' => $item->price
+                'discount' => $item->getPrice(),
+                'price' => $item->getPrice()
             ]);
         }
 
@@ -246,6 +246,7 @@ class Shopcart extends \yii\easyii\components\API
         $model->user_id = Yii::$app->user->getId();
         $model->community_id = Community::community()->id;
         $model->order_sn = $this->getOrderSn();
+        $model->out_trade_no = $model->order_sn.'_'.rand(10000,99999);
 
         if($model->save()){
             if ($new_address == 1){

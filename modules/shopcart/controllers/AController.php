@@ -22,7 +22,7 @@ class AController extends Controller
     {
         parent::init();
 
-        $this->all = Order::find()->where(['>','user_id',0])->count();
+        $this->all = Order::find()->where(['or',['user_id'=>null],['>','user_id',0]])->count();
         $this->pending = Order::find()->status(Order::STATUS_PENDING)->count();
         $this->processed = Order::find()->status(Order::STATUS_PROCESSED)->count();
         $this->sent = Order::find()->status(Order::STATUS_SENT)->count();
@@ -31,80 +31,128 @@ class AController extends Controller
         $this->refund = Order::find()->where(['pay'=>1,'is_refund'=>0,'status'=>Order::STATUS_DECLINED])->count();
     }
 
-    public function actionIndex()
+    public function actionIndex($type='')
     {
+        $query = Order::find()->with('goods')->where(['or',['user_id'=>null],['>','user_id',0]])->desc();
+
+        if($type === 'export'){
+            return $this->Export($query->all(), '所有');
+        }
+
         return $this->render('index', [
             'data' => new ActiveDataProvider([
-                'query' => Order::find()->with('goods')->where(['>','user_id',0])->desc(),
+                'query' => $query,
             ])
         ]);
     }
 
-    public function actionPending()
+    public function actionPending($type='')
     {
+        $query = Order::find()->with('goods')->status(Order::STATUS_PENDING)->desc();
+
+        if($type === 'export'){
+            return $this->Export($query->all(), '未处理');
+        }
+
         $this->setReturnUrl();
         return $this->render('index', [
             'data' => new ActiveDataProvider([
-                'query' => Order::find()->with('goods')->status(Order::STATUS_PENDING)->asc(),
+                'query' => $query,
             ])
         ]);
     }
 
-    public function actionProcessed()
+    public function actionProcessed($type='')
     {
+        $query = Order::find()->with('goods')->status(Order::STATUS_PROCESSED)->desc();
+
+        if($type === 'export'){
+            return $this->Export($query->all(), '处理中');
+        }
+
         $this->setReturnUrl();
         return $this->render('index', [
             'data' => new ActiveDataProvider([
-                'query' => Order::find()->with('goods')->status(Order::STATUS_PROCESSED)->asc(),
+                'query' => $query,
             ])
         ]);
     }
 
-    public function actionSent()
+    public function actionSent($type='')
     {
+        $query = Order::find()->with('goods')->status(Order::STATUS_SENT)->desc();
+
+        if($type === 'export'){
+            return $this->Export($query->all(), '已发货');
+        }
+
         $this->setReturnUrl();
         return $this->render('index', [
             'data' => new ActiveDataProvider([
-                'query' => Order::find()->with('goods')->status(Order::STATUS_SENT)->asc(),
+                'query' => $query,
             ])
         ]);
     }
 
-    public function actionCompleted()
+    public function actionCompleted($type='')
     {
+        $query = Order::find()->with('goods')->status(Order::STATUS_COMPLETED)->desc();
+
+        if($type === 'export'){
+            return $this->Export($query->all(), '已完成');
+        }
+
         $this->setReturnUrl();
         return $this->render('index', [
             'data' => new ActiveDataProvider([
-                'query' => Order::find()->with('goods')->status(Order::STATUS_COMPLETED)->desc()
+                'query' => $query
             ])
         ]);
     }
 
-    public function actionFails()
+    public function actionFails($type='')
     {
+        $query = Order::find()->with('goods')->where(['in', 'status', [Order::STATUS_DECLINED, Order::STATUS_ERROR, Order::STATUS_RETURNED]])->desc();
+        
+        if($type === 'export'){
+            return $this->Export($query->all(), '无效');
+        }
+
         $this->setReturnUrl();
         return $this->render('index', [
             'data' => new ActiveDataProvider([
-                'query' => Order::find()->with('goods')->where(['in', 'status', [Order::STATUS_DECLINED, Order::STATUS_ERROR, Order::STATUS_RETURNED]])->desc()
+                'query' => $query
             ])
         ]);
     }
 
-    public function actionRefund()
+    public function actionRefund($type='')
     {
+        $query = Order::find()->with('goods')->where(['pay'=>1,'is_refund'=>0,'status'=>Order::STATUS_DECLINED])->desc();
+        
+        if($type === 'export'){
+            return $this->Export($query->all(), '待退款');
+        }
+
         return $this->render('index', [
             'data' => new ActiveDataProvider([
-                'query' => Order::find()->with('goods')->where(['pay'=>1,'is_refund'=>0,'status'=>Order::STATUS_DECLINED])->desc(),
+                'query' => $query,
             ])
         ]);
     }
 
-    public function actionBlank()
+    public function actionBlank($type='')
     {
+        $query = Order::find()->with('goods')->status(Order::STATUS_BLANK)->desc();
+        
+        if($type === 'export'){
+            return $this->Export($query->all());
+        }
+
         $this->setReturnUrl();
         return $this->render('index', [
             'data' => new ActiveDataProvider([
-                'query' => Order::find()->with('goods')->status(Order::STATUS_BLANK)->desc()
+                'query' => $query
             ])
         ]);
     }
@@ -160,20 +208,31 @@ class AController extends Controller
     public function actionDelete($id)
     {
         if(($model = Order::findOne($id))){
-            $model->delete();
+            if($model->status === Order::STATUS_DECLINED || $model->status === Order::STATUS_ERROR || $order->status == Order::STATUS_RETURNED){
+                $model->delete();
+            }
+            else{
+                $model->status = Order::STATUS_ERROR;
+                $model->save();
+            }
         } else {
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii/shopcart', 'Order deleted'));
     }
 
-    public function actionExport($type='')
+    private function Export($allModels, $title='')
     {
-        $allModels = Order::find()->with('goods')->where(['>','user_id',0])->desc()->all();
-
         \moonland\phpexcel\Excel::export([
             'models' => $allModels, 
-            'columns' => ['name',[
+            'fileName' => '疆源订单 - '.$title,
+            'columns' => ['out_trade_no',[
+                    'attribute' => 'name',
+                    'format' => 'text',
+                    'value' => function($model) {
+                        return $model->name.' '.$model->getSexText();
+                    },
+                ],[
                     'attribute' => 'address',
                     'format' => 'text',
                     'value' => function($model) {
@@ -213,6 +272,7 @@ class AController extends Controller
                 ]
             ], 
             'headers' => [
+                'out_trade_no' => '支付单号',
                 'name' => Yii::t('easyii', 'Name'),
                 'phone' => Yii::t('easyii', 'Phone'),
                 'address' => Yii::t('easyii/shopcart', 'Address'), 

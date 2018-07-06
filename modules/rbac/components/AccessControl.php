@@ -85,7 +85,9 @@ class AccessControl extends \yii\base\ActionFilter
     protected function denyAccess($user)
     {
         if ($user->getIsGuest()) {
-            Yii::$app->user->setReturnUrl(Yii::$app->request->getUrl());
+            if (!Yii::$app->request->getIsAjax()) {
+                Yii::$app->user->setReturnUrl(Yii::$app->request->getUrl());
+            }
             $user->loginRequired();
         } else {
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));

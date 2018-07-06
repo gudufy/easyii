@@ -35,7 +35,7 @@ class Order extends \yii\easyii\components\ActiveRecord
             //['email', 'required', 'when' => function($model){ return $model->scenario == 'confirm' && Yii::$app->getModule('admin')->activeModules['shopcart']->settings['enableEmail']; }],
             ['phone', 'required', 'when' => function($model){ return $model->scenario == 'confirm' && Yii::$app->getModule('admin')->activeModules['shopcart']->settings['enablePhone']; }],
             [['name', 'address', 'phone', 'comment'], 'trim'],
-            [['province_id', 'city_id', 'district_id', 'user_id', 'sex','address','name'], 'required', 'when' => function($model){
+            [['province_id', 'city_id', 'district_id', 'sex','address','name'], 'required', 'when' => function($model){
                 return !$model->isNewRecord;
             }],
             ['email', 'email'],
@@ -117,6 +117,11 @@ class Order extends \yii\easyii\components\ActiveRecord
         }
 
         return $total;
+    }
+
+    public function getSexText(){
+        if($this->sex === null) return '';
+        return \yii\easyii\models\User::getSexs()[$this->sex];
     }
 
     public function beforeSave($insert)

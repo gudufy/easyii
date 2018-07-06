@@ -37,7 +37,7 @@ $(function(){
                     notify.success(response.msg);
                     location.reload();
                 } else {
-                    alert(response.package.err_code_des);
+                    alert(response.package ? response.package.err_code_des : response.msg);
                 }
             });
         }

@@ -35,7 +35,7 @@ $module = $this->context->module->id;
                         <span class="label label-warning">NEW</span>
                     <?php endif; ?>
                 </td>
-                <td><?= $item->name ?></td>
+                <td><?= $item->name ?> <?= $item->getSexText() ?></td>
                 <td><?= $item->phone ?></td>
                 <td><?= $item->getFullRegion() ?><?= $item->address ?></td>
                 <td><?= $item->cost ?></td>
@@ -53,7 +53,7 @@ $module = $this->context->module->id;
                         <a href="<?= Url::to(['/admin/'.$module.'/a/view', 'id' => $item->primaryKey]) ?>" class="btn btn-default" title="<?= Yii::t('easyii/shopcart', 'View') ?>"><span class="glyphicon glyphicon-eye-open"></span></a>
                         <a href="<?= Url::to(['/admin/'.$module.'/a/delete', 'id' => $item->primaryKey]) ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"><span class="glyphicon glyphicon-remove"></span></a>
                         <?php if($item->status === 3 && $item->pay===1 && $item->is_refund===0) : ?>
-                        <a href="<?= Url::to(['/wechat/order-refund', 'out_trade_no' => $item->order_sn]) ?>" class="btn btn-default confirm-refund" title="同意退款"><span class="glyphicon">退</span></a>
+                        <a href="<?= Url::to(['/wechat/order-refund', 'order_sn' => $item->order_sn]) ?>" class="btn btn-default confirm-refund" title="同意退款"><span class="glyphicon">退</span></a>
                         <?php endif; ?>
                     </div>
                 </td>

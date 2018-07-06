@@ -36,7 +36,9 @@ class ItemObject extends \yii\easyii\components\ApiObject
 
     public function getPrice(){
         //return $this->discount ? round($this->model->price * (1 - $this->discount / 100) ) : $this->model->price;
-        return $this->discount ? $this->discount : $this->model->price;
+        return $this->model->getPrice();
+
+        //return $this->discount ? $this->discount : $this->model->price;
     }
 
     public function getOldPrice(){

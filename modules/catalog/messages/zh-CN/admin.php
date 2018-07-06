@@ -17,9 +17,11 @@ return [
     'Sub Title' => '子标题',
     'Type' => '类型',
     'Options' => '选项',
-    'Available' => '可用',
+    'Available' => '库存',
     'Price' => '价格',
-    'Discount' => '优惠价',
+    'Discount' => '零售价',
+    'Price1' => '微商价',
+    'Price2' => '分销价',
     'Select' => '下拉',
     'Recommended' => '推荐',
 ];

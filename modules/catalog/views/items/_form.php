@@ -40,9 +40,7 @@ $cats = ArrayHelper::map(Category::find()->all(),'category_id','title');
     <?php endif; ?>
     <?= $form->field($model, 'image')->fileInput() ?>
 <?php endif; ?>
-<div class="prices-box">
-<?= $pricesForm ?>
-</div>
+
 <?= $dataForm ?>
     <?= $form->field($model, 'description')->widget(Redactor::className(),[
         'options' => [
@@ -60,8 +58,10 @@ $cats = ArrayHelper::map(Category::find()->all(),'category_id','title');
 <?php if($settings['itemSale']) : ?>
 <div id='old-prices'>
 <?= $form->field($model, 'available')->textInput(['maxlength' => true]) ?>
-<?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
+<!-- <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?> -->
 <?= $form->field($model, 'discount')->textInput(['maxlength' => true]) ?>
+<?= $form->field($model, 'price1')->textInput(['maxlength' => true]) ?>
+<?= $form->field($model, 'price2')->textInput(['maxlength' => true]) ?>
         </div>
 <?php endif; ?>
 

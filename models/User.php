@@ -27,7 +27,7 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
     public function rules()
     {
         return [
-            [['username','name','sex'], 'required'],
+            [['username','name','sex','level'], 'required'],
             ['mobile','match','pattern'=>'/^1[0-9]{10}$/','message'=>'{attribute}必须为1开头的11位纯数字'],
             ['username', 'unique'],
             ['password_hash', 'required', 'on' => 'create'],
@@ -55,6 +55,7 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
             'address' => Yii::t('easyii', 'Address'),
             'phone' => Yii::t('easyii', 'Phone'),
             'fax' => Yii::t('easyii', 'Fax'),
+            'level' => '会员类型',
         ];
     }
 
@@ -102,6 +103,15 @@ class User extends \yii\easyii\components\ActiveRecord implements \yii\web\Ident
         } else {
             return false;
         }
+    }
+
+    public static function getLevels (){
+        return [0 => '普通会员', 1 => '微商', 2 => '分销商'];
+    }
+
+    public function getLevelText(){
+        if($this->level === null) return '';
+        return static::getLevels()[$this->level];
     }
     
     public static function getSexs (){

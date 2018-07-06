@@ -132,7 +132,7 @@ if($action === 'view')
         </a>
     </li>
     <li>
-        <a href="<?= Url::to(['/admin/'.$module.'/a/export']) ?>" class="label label-danger">
+        <a href="<?= Url::to(['/admin/'.$module.'/a/'.$action.'?type=export']) ?>" class="label label-danger">
             <?= Yii::t('easyii', 'Export') ?>
         </a>
     </li>
